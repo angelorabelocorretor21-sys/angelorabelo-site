@@ -167,7 +167,8 @@
 .card{cursor:pointer}.card .img{position:relative;overflow:hidden}
 .wm{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
 .wm span{font-family:'Cormorant Garamond',serif;font-size:19px;letter-spacing:2px;color:rgba(255,255,255,.30);transform:rotate(-16deg);text-shadow:0 1px 4px rgba(0,0,0,.4);white-space:nowrap}
-.pcount{position:absolute;bottom:12px;right:12px;background:rgba(18,16,13,.62);color:#fff;font-size:12px;padding:4px 10px;border-radius:20px}
+.pcount{position:absolute;bottom:12px;right:12px;background:rgba(18,16,13,.62);color:#fff;font-size:12px;padding:4px 10px;border-radius:20px;z-index:3}
+.cardbrand{position:absolute;left:0;right:0;bottom:0;height:40px;background:linear-gradient(180deg,rgba(18,15,10,0),#12100d 55%);display:flex;align-items:flex-end;justify-content:center;padding-bottom:7px;font-family:'Cormorant Garamond',serif;font-size:11.5px;letter-spacing:1.5px;color:#e7cf8f;text-transform:uppercase;pointer-events:none;z-index:2}
 .lb{position:fixed;inset:0;background:rgba(12,10,8,.95);z-index:300;display:none;align-items:center;justify-content:center;flex-direction:column;padding:18px}
 .lb.open{display:flex}
 .lbw{position:relative;max-width:1000px;width:100%}
@@ -175,6 +176,9 @@
 .lbwm{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
 .lbwm span{font-family:'Cormorant Garamond',serif;font-size:34px;letter-spacing:3px;color:rgba(255,255,255,.28);transform:rotate(-16deg);text-shadow:0 1px 6px rgba(0,0,0,.45);white-space:nowrap}
 .lbwm small{position:absolute;bottom:14px;right:16px;font-size:13px;color:rgba(255,255,255,.8);letter-spacing:1px;font-family:'Jost',sans-serif}
+.lbbrand{position:absolute;display:none;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:linear-gradient(180deg,rgba(18,15,10,0),#100e0b 24%);border-radius:0 0 6px 6px;pointer-events:none;overflow:hidden;z-index:4}
+.lbbrand b{font-family:'Cormorant Garamond',serif;color:#e7cf8f;font-size:clamp(13px,2.1vw,20px);letter-spacing:2.5px;font-weight:600;text-transform:uppercase;line-height:1}
+.lbbrand span{font-family:'Jost',sans-serif;color:rgba(255,255,255,.86);font-size:clamp(9px,1.35vw,12px);letter-spacing:1px;text-align:center;padding:0 8px}
 .lbn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.45);color:#fff;border:none;width:50px;height:50px;border-radius:50%;font-size:26px;cursor:pointer}
 .lbn:hover{background:var(--gold)}.lbp{left:10px}.lbx{right:10px}
 .lbclose{position:absolute;top:14px;right:20px;background:none;border:none;color:#fff;font-size:38px;cursor:pointer;z-index:2}
@@ -434,7 +438,7 @@ function cardHTML(i){
   const img=cover?("background-image:linear-gradient(rgba(0,0,0,.03),rgba(0,0,0,.4)),url('"+cover+"')"):"background:linear-gradient(135deg,#241d13,#4a3c24)";
   const f=feats(i).map(x=>'<span>'+esc(x)+'</span>').join('')||'<span>Consulte</span>';
   return '<div class="card reveal in" onclick="openLB(\''+i.codigo+'\')">'+
-   '<div class="img" style="'+img+'"><span class="tag">'+esc(i.finalidade||'')+'</span><div class="wm"><span>ANGELO RABÊLO</span></div>'+(n>1?'<div class="pcount">📷 '+n+'</div>':'')+'</div>'+
+   '<div class="img" style="'+img+'"><span class="tag">'+esc(i.finalidade||'')+'</span><div class="wm"><span>ANGELO RABÊLO</span></div>'+(n>1?'<div class="pcount">📷 '+n+'</div>':'')+'<div class="cardbrand">ANGELO RABÊLO · CRECI-PE 9560</div></div>'+
    '<div class="body"><div class="cod">Cód. '+esc(i.codigoAR)+' · '+esc(i.tipo||'')+'</div>'+
    '<h3>'+esc(i.titulo||'')+'</h3>'+
    '<div class="loc">'+esc([i.bairro,i.cidade].filter(Boolean).join(' · '))+'</div>'+
@@ -463,7 +467,18 @@ function verMais(){ _shown+=12; paint(); }
 /* ---- Lightbox / carrossel ---- */
 let _lb={list:[],idx:0,imovel:null};
 function openLB(codigo){ const i=IMOVEIS.find(x=>String(x.codigo)===String(codigo)); if(!i)return; _lb.imovel=i; _lb.list=(i.fotos&&i.fotos.length?i.fotos:(i.foto?[i.foto]:[])); _lb.idx=0; document.getElementById('lb').classList.add('open'); document.body.style.overflow='hidden'; paintLB(); }
+function positionLbBrand(){
+  var img=document.getElementById('lb-photo'), bar=document.getElementById('lb-brand');
+  if(!img||!bar)return;
+  if(!img.naturalWidth||!img.clientWidth){ bar.style.display='none'; return; }
+  var cw=img.clientWidth, ch=img.clientHeight, nw=img.naturalWidth, nh=img.naturalHeight;
+  var s=Math.min(cw/nw, ch/nh), rw=nw*s, rh=nh*s;
+  var left=(cw-rw)/2, top=(ch-rh)/2, barH=Math.max(30, rh*0.13);
+  bar.style.left=left+'px'; bar.style.top=(top+rh-barH)+'px';
+  bar.style.width=rw+'px'; bar.style.height=barH+'px'; bar.style.display='flex';
+}
 function paintLB(){ const i=_lb.imovel; if(!i)return;
+  var _b=document.getElementById('lb-brand'); if(_b)_b.style.display='none';
   document.getElementById('lb-photo').src=_lb.list[_lb.idx]||'';
   document.getElementById('lb-count').textContent=_lb.list.length?((_lb.idx+1)+' / '+_lb.list.length):'';
   document.getElementById('lb-title').textContent=i.titulo||'';
@@ -479,7 +494,8 @@ document.addEventListener('keydown',function(e){ if(!document.getElementById('lb
   const lb=document.createElement('div'); lb.className='lb'; lb.id='lb';
   lb.innerHTML='<button class="lbclose" onclick="closeLB()">×</button>'+
    '<div class="lbw"><img id="lb-photo" src="" alt="Foto do imóvel">'+
-   '<div class="lbwm"><span>ANGELO RABÊLO</span><small>www.angelorabeloimoveis.com.br · CRECI 9560</small></div>'+
+   '<div class="lbwm"><span>ANGELO RABÊLO</span></div>'+
+   '<div class="lbbrand" id="lb-brand"><b>ANGELO RABÊLO IMÓVEIS</b><span>CRECI-PE 9560 · www.angelorabeloimoveis.com.br · (81) 99383-7490</span></div>'+
    '<button class="lbn lbp" onclick="lbNav(-1)">‹</button><button class="lbn lbx" onclick="lbNav(1)">›</button></div>'+
    '<div class="lbcount" id="lb-count"></div>'+
    '<div class="lbinfo"><div><div class="t" id="lb-title"></div><div id="lb-cod" style="color:rgba(255,255,255,.6);font-size:12px;letter-spacing:.08em;margin-top:4px"></div></div>'+
@@ -487,6 +503,8 @@ document.addEventListener('keydown',function(e){ if(!document.getElementById('lb
    '<div class="lbdesc" id="lb-desc"></div>';
   lb.addEventListener('click',function(e){ if(e.target===lb)closeLB(); });
   document.body.appendChild(lb);
+  document.getElementById('lb-photo').addEventListener('load', positionLbBrand);
+  window.addEventListener('resize', positionLbBrand);
   const tipos=[...new Set(IMOVEIS.map(i=>i.tipo).filter(Boolean))].sort();
   document.getElementById('f-tipo').innerHTML='<option value="">Todos os tipos</option>'+tipos.map(t=>'<option>'+t+'</option>').join('');
   paint();

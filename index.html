@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+<!-- Google Analytics 4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-5CSDZ4BLJF"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-5CSDZ4BLJF');
+</script>
+<!-- /Google Analytics 4 -->
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Angelo Rabêlo Imóveis · Alto padrão, fazendas e sítios no Agreste — Gravatá/PE</title>
@@ -516,6 +526,43 @@ document.addEventListener('keydown',function(e){ if(!document.getElementById('lb
   const tipos=[...new Set(IMOVEIS.map(i=>i.tipo).filter(Boolean))].sort();
   document.getElementById('f-tipo').innerHTML='<option value="">Todos os tipos</option>'+tipos.map(t=>'<option>'+t+'</option>').join('');
   paint();
+})();
+</script>
+
+<script>
+/* Eventos de conversao — Rabelo Imoveis */
+(function () {
+  function ev(nome, dados) {
+    if (typeof gtag === 'function') gtag('event', nome, dados || {});
+  }
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a');
+    if (!a || !a.href) return;
+
+    if (a.href.indexOf('wa.me/') > -1) {
+      var sec = a.closest('section');
+      ev('clique_whatsapp', {
+        origem: (sec && sec.id) ? sec.id : 'geral',
+        texto: (a.innerText || '').trim().slice(0, 40)
+      });
+    }
+    if (a.href.indexOf('pay.kiwify.com.br') > -1) {
+      ev('clique_comprar_ebook', {
+        produto: a.href.indexOf('795MFfu') > -1 ? 'guia_fazendas' : 'vender_imovel'
+      });
+    }
+    if (a.href.indexOf('instagram.com') > -1) ev('clique_instagram', {});
+  }, true);
+
+  /* profundidade de leitura: sinaliza interesse real */
+  var marcos = {25: false, 50: false, 75: false, 100: false};
+  window.addEventListener('scroll', function () {
+    var h = document.documentElement;
+    var pct = Math.round(((h.scrollTop + window.innerHeight) / h.scrollHeight) * 100);
+    for (var m in marcos) {
+      if (!marcos[m] && pct >= m) { marcos[m] = true; ev('leitura_pagina', {profundidade: Number(m)}); }
+    }
+  }, {passive: true});
 })();
 </script>
 </body>

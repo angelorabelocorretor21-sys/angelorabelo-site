@@ -557,7 +557,7 @@ function paintLB(){ const i=_lb.imovel; if(!i)return;
   document.getElementById('lb-cod').textContent='Cód. '+i.codigoAR+' · '+(i.tipo||'')+' · '+[i.bairro,i.cidade].filter(Boolean).join(' · ');
   document.getElementById('lb-price').innerHTML=precoTxt(i);
   var _dsc=document.getElementById('lb-desc'); if(_dsc){ _dsc.textContent=i.descricao||''; _dsc.style.display=i.descricao?'':'none'; }
-  document.getElementById('lb-wa').href='https://wa.me/'+WA+'?text='+encodeURIComponent('Olá Angelo, tenho interesse no imóvel #'+i.codigoAR+' - '+(i.titulo||''));
+  document.getElementById('lb-wa').href='https://wa.me/'+WA+'?text='+encodeURIComponent('Olá Angelo, tenho interesse no imóvel #'+i.codigoAR+' - '+(i.titulo||'')+'\n\nhttps://www.angelorabeloimoveis.com.br/imovel/'+i.codigoAR+'/');
 }
 function lbNav(d){ if(!_lb.list.length)return; _lb.idx=(_lb.idx+d+_lb.list.length)%_lb.list.length; paintLB(); }
 function closeLB(){ document.getElementById('lb').classList.remove('open'); document.body.style.overflow=''; }

@@ -198,6 +198,8 @@
 .lbinfo .p{font-family:'Cormorant Garamond';font-size:24px;color:var(--gold2)}
 .lbdesc{width:100%;max-width:1000px;margin:12px auto 0;color:rgba(255,255,255,.82);font-size:14.5px;line-height:1.6;white-space:pre-line;max-height:26vh;overflow-y:auto;padding:14px 16px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:8px}
 .lbcount{color:rgba(255,255,255,.8);font-size:13px;margin-top:10px}
+.verficha{display:inline-block;margin-top:10px;font-size:13px;letter-spacing:.04em;color:var(--gold);text-decoration:none;border-bottom:1px solid rgba(156,118,34,.4);padding-bottom:2px}
+.verficha:hover{color:#8a6820;border-color:#8a6820}
 </style>
 </head>
 <body>
@@ -462,7 +464,9 @@ function cardHTML(i){
    '<h3>'+esc(i.titulo||'')+'</h3>'+
    '<div class="loc">'+esc([i.bairro,i.cidade].filter(Boolean).join(' · '))+'</div>'+
    '<div class="feats">'+f+'</div>'+
-   '<div class="price">'+precoTxt(i)+'</div></div></div>';
+   '<div class="price">'+precoTxt(i)+'</div>'+
+   '<a class="verficha" href="/imovel/'+esc(i.codigoAR)+'/" onclick="event.stopPropagation()">Ver ficha completa &rarr;</a>'+
+   '</div></div>';
 }
 function filtered(){
   const q=(document.getElementById('f-busca').value||'').toLowerCase();

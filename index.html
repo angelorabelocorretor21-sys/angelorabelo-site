@@ -200,6 +200,8 @@
 .lbcount{color:rgba(255,255,255,.8);font-size:13px;margin-top:10px}
 .verficha{display:inline-block;margin-top:10px;font-size:13px;letter-spacing:.04em;color:var(--gold);text-decoration:none;border-bottom:1px solid rgba(156,118,34,.4);padding-bottom:2px}
 .verficha:hover{color:#8a6820;border-color:#8a6820}
+.cat{cursor:pointer}
+.cat-on{outline:3px solid var(--gold);outline-offset:3px}
 </style>
 </head>
 <body>
@@ -287,10 +289,10 @@
       <p>Do chalé na serra à fazenda produtiva, encontre o seu Agreste.</p>
     </div>
     <div class="cats">
-      <a class="cat reveal" style="background-image:url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=600&q=80')"><span>Fazendas</span></a>
-      <a class="cat reveal" style="background-image:url('https://images.unsplash.com/photo-1523217582562-09d0def993a6?auto=format&fit=crop&w=600&q=80')"><span>Sítios & Chácaras</span></a>
-      <a class="cat reveal" style="background-image:url('https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=600&q=80')"><span>Alto Padrão</span></a>
-      <a class="cat reveal" style="background-image:url('https://images.unsplash.com/photo-1449844908441-8829872d2607?auto=format&fit=crop&w=600&q=80')"><span>Chalés na Serra</span></a>
+      <a class="cat reveal" data-cat="fazendas" href="javascript:void(0)" onclick="filtrarCategoria('fazendas')" style="background-image:url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=600&q=80')"><span>Fazendas</span></a>
+      <a class="cat reveal" data-cat="sitios" href="javascript:void(0)" onclick="filtrarCategoria('sitios')" style="background-image:url('https://images.unsplash.com/photo-1523217582562-09d0def993a6?auto=format&fit=crop&w=600&q=80')"><span>Sítios & Chácaras</span></a>
+      <a class="cat reveal" data-cat="altopadrao" href="javascript:void(0)" onclick="filtrarCategoria('altopadrao')" style="background-image:url('https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=600&q=80')"><span>Alto Padrão</span></a>
+      <a class="cat reveal" data-cat="altopadrao" href="javascript:void(0)" onclick="filtrarCategoria('altopadrao')" style="background-image:url('https://images.unsplash.com/photo-1449844908441-8829872d2607?auto=format&fit=crop&w=600&q=80')"><span>Chalés na Serra</span></a>
     </div>
   </div>
 </section>
@@ -468,10 +470,28 @@ function cardHTML(i){
    '<a class="verficha" href="/imovel/'+esc(i.codigoAR)+'/" onclick="event.stopPropagation()">Ver ficha completa &rarr;</a>'+
    '</div></div>';
 }
+
+/* Filtro por categoria (Explore por categoria) */
+const GRUPOS_CAT = {"fazendas": ["Fazenda", "Haras"], "sitios": ["Sítio", "Chácara"], "altopadrao": ["Casa em condomínio", "Casa fora de condomínio", "Apartamento", "Flat"], "terrenos": ["Lotes", "Lote dentro de condomínio", "Lote fora de condomínio"], "comercial": ["Área comercial", "Galpão", "Prédio comercial"]};
+let CAT_ATIVA = null;
+function filtrarCategoria(g){
+  CAT_ATIVA = (CAT_ATIVA === g) ? null : g;
+  document.querySelectorAll('.cat').forEach(function(el){
+    el.classList.toggle('cat-on', el.dataset.cat === CAT_ATIVA);
+  });
+  var sel = document.getElementById('f-tipo'); if (sel) sel.value = '';
+  var busca = document.getElementById('f-busca'); if (busca) busca.value = '';
+  renderImoveis();
+  if (typeof gtag === 'function') gtag('event','filtro_categoria',{categoria: g});
+  var alvo = document.getElementById('imoveis');
+  if (alvo) alvo.scrollIntoView({behavior:'smooth'});
+}
+
 function filtered(){
   const q=(document.getElementById('f-busca').value||'').toLowerCase();
   const fin=document.getElementById('f-fin').value, tp=document.getElementById('f-tipo').value, fx=document.getElementById('f-faixa').value;
   return IMOVEIS.filter(function(i){
+    if(CAT_ATIVA && GRUPOS_CAT[CAT_ATIVA].indexOf(i.tipo)<0) return false;
     if(fin && !String(i.finalidade||'').includes(fin)) return false;
     if(tp && i.tipo!==tp) return false;
     if(q && !((i.titulo+' '+i.codigo+' '+i.codigoAR+' '+(i.cidade||'')+' '+(i.tipo||'')).toLowerCase().includes(q))) return false;

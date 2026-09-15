@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Leads · Angelo Rabêlo Imóveis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#faf6ee;--panel:#fff;--gold:#9c7622;--gold2:#c9a24b;--ink:#2c2620;--muted:#6b6154;--line:rgba(156,118,34,.22);
+    --novo:#a6741f;--novo-bg:#f4ead2;--contatado:#3f6fa6;--contatado-bg:#dde8f4;--qualificado:#3f7a52;--qualificado-bg:#e2f0e5;--descartado:#8b8171;--descartado-bg:#eee9dd}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Jost',sans-serif;font-weight:300}
+  .wrap{max-width:1100px;margin:0 auto;padding:28px 20px 80px}
+  h1{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:700;margin:0 0 4px;color:var(--ink)}
+  .sub{color:var(--muted);font-size:14px;margin:0 0 26px}
+
+  #gate{max-width:360px;margin:80px auto;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:28px;text-align:center}
+  #gate h1{font-size:22px}
+  #gate input{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:6px;font-size:15px;margin:14px 0;font-family:'Jost'}
+  #gate button{width:100%;background:var(--gold);color:#fff;border:none;border-radius:6px;padding:12px;font-size:15px;cursor:pointer}
+  #gate button:hover{background:#8a6820}
+  #gate .err{color:#a13f3f;font-size:13.5px;min-height:18px}
+
+  #app{display:none}
+  .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:18px}
+  .toolbar select,.toolbar input{padding:8px 10px;border:1px solid var(--line);border-radius:6px;font-family:'Jost';font-size:14px;background:var(--panel)}
+  .count{color:var(--muted);font-size:13px;margin-left:auto}
+
+  .lead-card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin-bottom:12px}
+  .lead-top{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline}
+  .lead-nome{font-weight:600;font-size:16px}
+  .lead-data{color:var(--muted);font-size:12.5px}
+  .lead-body{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:6px 18px;margin:10px 0;font-size:14px}
+  .lead-body b{color:var(--muted);font-weight:500;font-size:11.5px;text-transform:uppercase;letter-spacing:.03em;display:block}
+  .lead-msg-txt{font-size:14px;color:var(--ink);background:var(--bg);border-radius:6px;padding:8px 10px;margin-top:8px}
+  .lead-actions{display:flex;gap:8px;align-items:center;margin-top:12px;flex-wrap:wrap}
+  .pill{font-size:11.5px;font-weight:600;padding:4px 10px;border-radius:20px}
+  .pill.novo{color:var(--novo);background:var(--novo-bg)}
+  .pill.contatado{color:var(--contatado);background:var(--contatado-bg)}
+  .pill.qualificado{color:var(--qualificado);background:var(--qualificado-bg)}
+  .pill.descartado{color:var(--descartado);background:var(--descartado-bg)}
+  select.status-select{border:1px solid var(--line);border-radius:6px;padding:6px 8px;font-family:'Jost';font-size:13px}
+  a.wa-link{color:var(--gold);font-size:13.5px;text-decoration:none;font-weight:500}
+  a.wa-link:hover{text-decoration:underline}
+  .empty{color:var(--muted);text-align:center;padding:60px 0}
+</style>
+</head>
+<body>
+<div id="gate">
+  <h1>Painel de leads</h1>
+  <p class="sub">Angelo Rabêlo Imóveis</p>
+  <input id="gate-pass" type="password" placeholder="Senha do painel" autocomplete="current-password">
+  <button id="gate-btn">Entrar</button>
+  <p class="err" id="gate-err"></p>
+</div>
+
+<div id="app">
+  <div class="wrap">
+    <h1>Leads</h1>
+    <p class="sub">Contatos recebidos pelo site angelorabeloimoveis.com.br</p>
+    <div class="toolbar">
+      <select id="f-status">
+        <option value="">Todos os status</option>
+        <option value="novo">Novo</option>
+        <option value="contatado">Contatado</option>
+        <option value="qualificado">Qualificado</option>
+        <option value="descartado">Descartado</option>
+      </select>
+      <input id="f-busca" type="text" placeholder="Buscar por nome, telefone ou código do imóvel">
+      <span class="count" id="count"></span>
+    </div>
+    <div id="list"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var PASS_KEY = "rabelo_leads_pass";
+  var leadsCache = [];
+
+  function fmtData(iso){
+    try{
+      var d = new Date(iso);
+      return d.toLocaleDateString('pt-BR') + ' às ' + d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+    }catch(e){ return iso; }
+  }
+
+  function waLink(lead){
+    var digits = (lead.telefone||'').replace(/\D/g,'');
+    if(!digits) return null;
+    if(digits.length <= 11) digits = '55' + digits;
+    var texto = 'Olá ' + lead.nome + ', aqui é o Angelo Rabêlo';
+    if(lead.imovel_codigo) texto += ', vi seu interesse no imóvel ' + lead.imovel_codigo;
+    texto += '. Podemos conversar?';
+    return 'https://wa.me/' + digits + '?text=' + encodeURIComponent(texto);
+  }
+
+  function cardHTML(lead){
+    var wa = waLink(lead);
+    var body = ''
+      + (lead.telefone ? '<div><b>Telefone</b>' + esc(lead.telefone) + '</div>' : '')
+      + (lead.email ? '<div><b>E-mail</b>' + esc(lead.email) + '</div>' : '')
+      + (lead.imovel_codigo ? '<div><b>Imóvel</b>' + esc(lead.imovel_codigo) + (lead.imovel_titulo ? ' · ' + esc(lead.imovel_titulo) : '') + '</div>' : '<div><b>Imóvel</b>Contato geral</div>')
+      + (lead.pagina_origem ? '<div><b>Página de origem</b>' + esc(lead.pagina_origem.replace('https://www.angelorabeloimoveis.com.br','')) + '</div>' : '')
+      + (lead.utm_source ? '<div><b>Origem</b>' + esc(lead.utm_source) + (lead.utm_campaign ? ' / ' + esc(lead.utm_campaign) : '') + '</div>' : '')
+      + (lead.opt_in_marketing ? '<div><b>Aceita novidades</b>Sim</div>' : '');
+    return '<div class="lead-card" data-id="' + esc(lead.id) + '">'
+      + '<div class="lead-top"><span class="lead-nome">' + esc(lead.nome) + '</span><span class="lead-data">' + fmtData(lead.criado_em) + '</span></div>'
+      + '<div class="lead-body">' + body + '</div>'
+      + (lead.mensagem ? '<div class="lead-msg-txt">' + esc(lead.mensagem) + '</div>' : '')
+      + '<div class="lead-actions">'
+      + '<span class="pill ' + lead.status + '">' + statusLabel(lead.status) + '</span>'
+      + '<select class="status-select" data-id="' + esc(lead.id) + '">'
+      + ['novo','contatado','qualificado','descartado'].map(function(s){
+          return '<option value="'+s+'"' + (s===lead.status?' selected':'') + '>' + statusLabel(s) + '</option>';
+        }).join('')
+      + '</select>'
+      + (wa ? '<a class="wa-link" target="_blank" rel="noopener" href="' + wa + '">Falar no WhatsApp →</a>' : '')
+      + '</div></div>';
+  }
+
+  function statusLabel(s){
+    return {novo:'Novo', contatado:'Contatado', qualificado:'Qualificado', descartado:'Descartado'}[s] || s;
+  }
+
+  function esc(s){
+    return String(s==null?'':s).replace(/[&<>"']/g, function(c){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+    });
+  }
+
+  function render(){
+    var statusF = document.getElementById('f-status').value;
+    var buscaF = document.getElementById('f-busca').value.toLowerCase();
+    var filtered = leadsCache.filter(function(l){
+      if(statusF && l.status !== statusF) return false;
+      if(buscaF){
+        var hay = [l.nome,l.telefone,l.imovel_codigo,l.imovel_titulo].join(' ').toLowerCase();
+        if(hay.indexOf(buscaF) === -1) return false;
+      }
+      return true;
+    });
+    document.getElementById('count').textContent = filtered.length + (filtered.length===1?' lead':' leads');
+    var list = document.getElementById('list');
+    list.innerHTML = filtered.length ? filtered.map(cardHTML).join('') : '<p class="empty">Nenhum lead encontrado.</p>';
+    list.querySelectorAll('.status-select').forEach(function(sel){
+      sel.addEventListener('change', function(){
+        updateStatus(sel.dataset.id, sel.value);
+      });
+    });
+  }
+
+  function authHeaders(){
+    return {'X-Admin-Password': sessionStorage.getItem(PASS_KEY) || ''};
+  }
+
+  function loadLeads(){
+    return fetch('/api/leads', {headers: authHeaders()}).then(function(r){
+      if(r.status === 401) throw new Error('senha');
+      return r.json();
+    }).then(function(data){
+      if(!data.ok) throw new Error(data.erro || 'erro');
+      leadsCache = data.leads || [];
+      render();
+    });
+  }
+
+  function updateStatus(id, status){
+    fetch('/api/lead-status', {
+      method:'POST',
+      headers: Object.assign({'Content-Type':'application/json'}, authHeaders()),
+      body: JSON.stringify({id:id, status:status})
+    }).then(function(r){ return r.json(); }).then(function(data){
+      if(data.ok){
+        var lead = leadsCache.find(function(l){ return l.id === id; });
+        if(lead) lead.status = status;
+        render();
+      }
+    });
+  }
+
+  document.getElementById('gate-btn').addEventListener('click', function(){
+    var pass = document.getElementById('gate-pass').value;
+    sessionStorage.setItem(PASS_KEY, pass);
+    loadLeads().then(function(){
+      document.getElementById('gate').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+    }).catch(function(){
+      document.getElementById('gate-err').textContent = 'Senha incorreta ou erro ao carregar.';
+    });
+  });
+  document.getElementById('gate-pass').addEventListener('keydown', function(ev){
+    if(ev.key === 'Enter') document.getElementById('gate-btn').click();
+  });
+  document.getElementById('f-status').addEventListener('change', render);
+  document.getElementById('f-busca').addEventListener('input', render);
+
+  // Se já tiver senha salva nesta aba, tenta entrar direto.
+  if(sessionStorage.getItem(PASS_KEY)){
+    loadLeads().then(function(){
+      document.getElementById('gate').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+    }).catch(function(){ /* deixa a tela de senha visível */ });
+  }
+})();
+</script>
+</body>
+</html>

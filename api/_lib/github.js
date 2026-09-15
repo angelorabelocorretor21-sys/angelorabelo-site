@@ -1,6 +1,7 @@
 // api/_lib/github.js
 // Helper compartilhado para ler/gravar o arquivo leads/leads.json no
 // repositorio privado configurado em GITHUB_LEADS_REPO.
+// (redeploy trigger: forca a Vercel reler as variaveis de ambiente)
 
 const LEADS_PATH = "leads/leads.json";
 

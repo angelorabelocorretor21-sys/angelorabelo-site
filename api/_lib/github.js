@@ -61,7 +61,9 @@ async function writeLeads(leads, sha, message) {
 }
 
 function checkAdminAuth(req) {
-  const expected = process.env.ADMIN_PASSWORD;
+  // Aceita ADMIN_PASSWORD (nome padrao) ou SENHA_DE_ADMINISTRADOR (caso o
+  // autocompletar do navegador tenha salvo a variavel com esse nome na Vercel).
+  const expected = process.env.ADMIN_PASSWORD || process.env.SENHA_DE_ADMINISTRADOR;
   if (!expected) return false;
   const header = req.headers["x-admin-password"];
   if (header && header === expected) return true;

@@ -1,1 +1,9 @@
-{"id":"teste-fotos-2","acao":"fotos","codigo":"AR-0129"}
+{"id":"teste-gerar-1","acao":"gerar","codigo":"AR-0129","roteiro":{
+ "codigo":"AR-0129","formato":"TOUR",
+ "gancho":"Olha o que está à venda em Pombos","gancho_sub":"Haras completo",
+ "destaques":["Haras completo","Pombos - PE","Área de lazer com piscina"],
+ "desejo":"Imagine seus fins de semana aqui","mostrar_preco":true,"cta":"Agende sua visita",
+ "stories":{"gancho":"Você moraria aqui?","destaque":"Haras completo em Pombos"},
+ "fotos":[0,2,7,1,5,12,8,3],"foto_preco":7,
+ "legenda":"TESTE DE GERAÇÃO NA NUVEM — NÃO PUBLICAR",
+ "hashtags":["#Pombos","#Haras","#RabeloImoveis"]}}

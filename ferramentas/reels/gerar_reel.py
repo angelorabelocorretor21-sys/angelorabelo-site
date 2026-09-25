@@ -442,34 +442,66 @@ def overlay(tipo, dados, im, destino):
     img.save(destino)
 
 
+def foto_angelo_circulo(diam):
+    """Foto oficial do Angelo (assets/angelo-cartao.jpg, a mesma dos posts institucionais) em círculo com anel dourado."""
+    src = Image.open(os.path.join(RAIZ, "assets", "angelo-cartao.jpg")).convert("RGB")
+    lado = int(src.width * 0.80)
+    x0 = max(0, min(src.width - lado, int(src.width * 0.53) - lado // 2))
+    y0 = int(src.height * 0.27)
+    src = src.crop((x0, y0, x0 + lado, y0 + lado)).resize((diam, diam), Image.LANCZOS)
+    mask = Image.new("L", (diam * 4, diam * 4), 0)
+    ImageDraw.Draw(mask).ellipse((0, 0, diam * 4, diam * 4), fill=255)
+    mask = mask.resize((diam, diam), Image.LANCZOS)
+    anel = 14
+    out = Image.new("RGBA", (diam + 2 * anel, diam + 2 * anel), (0, 0, 0, 0))
+    ImageDraw.Draw(out).ellipse((0, 0, diam + 2 * anel - 1, diam + 2 * anel - 1), fill=DOURADO + (255,))
+    out.paste(src, (anel, anel), mask)
+    return out
+
+
 def cartao_final(im, cta, destino, story=False):
+    """Cartão final (modelo aprovado pelo Angelo em 25/09/2026): logo pequena no alto,
+    foto do Angelo em destaque (como nos posts institucionais), nome, CRECI, CTA e WhatsApp."""
     img = Image.new("RGB", (W, H), ESCURO)
     d = ImageDraw.Draw(img)
-    # moldura dourada fina
     d.rectangle((48, 48, W - 48, H - 48), outline=(120, 97, 50), width=2)
-    # logo sobre cartão branco
+    # logo PEQUENA em cartão branco (canto superior esquerdo), selo CRECI à direita
     logo = Image.open(os.path.join(AQUI, "logo.png")).convert("RGB")
-    lw = 760
+    lw = 250
     logo = logo.resize((lw, int(logo.height * lw / logo.width)), Image.LANCZOS)
-    cx0, cy0 = (W - lw - 80) // 2, 400
-    d.rounded_rectangle((cx0, cy0, cx0 + lw + 80, cy0 + logo.height + 70), radius=28, fill=(255, 255, 255))
-    img.paste(logo, (cx0 + 40, cy0 + 35))
-    y = cy0 + logo.height + 170
-    f, ls = texto_ajustado(d, cta, F_SERIF, "Bold", 100, 70, W - 160, 2)
+    d.rounded_rectangle((100, 120, 100 + lw + 40, 120 + logo.height + 36), radius=18, fill=(255, 255, 255))
+    img.paste(logo, (120, 138))
+    fcr = fonte(F_SANS, 28, "SemiBold")
+    t = "CRECI-PE " + CRECI
+    tw = d.textlength(t, font=fcr)
+    yc = 120 + (logo.height + 36) // 2 - 30
+    d.rounded_rectangle((W - 100 - tw - 56, yc, W - 100, yc + 60), radius=30, outline=(150, 122, 62), width=2)
+    d.text((W - 100 - tw - 28, yc + 13), t, font=fcr, fill=(231, 210, 160))
+    # foto do Angelo
+    diam = 500
+    foto = foto_angelo_circulo(diam)
+    fy = 400
+    img.paste(foto, ((W - foto.width) // 2, fy), foto)
+    y = fy + foto.height + 40
+    fn = fonte(F_SANS, 70, "SemiBold")  # Jost: o "ê" da Cormorant Bold sai com acento deslocado no Pillow
+    y = escreve(d, (80, y), ["Angelo Rabêlo"], fn, CREME, centro=True, sombra=False)
+    fs = fonte(F_SANS, 34, "Medium")
+    y = escreve(d, (80, y + 6), ["Corretor de Imóveis · Perito Avaliador"], fs, DOURADO_CLARO, centro=True, sombra=False)
+    d.rectangle((W // 2 - 50, y + 34, W // 2 + 50, y + 38), fill=DOURADO)
+    y += 80
+    f, ls = texto_ajustado(d, cta, F_SERIF, "Bold", 88, 64, W - 160, 2)
     y = escreve(d, (80, y), ls, f, CREME, centro=True, sombra=False)
-    fw = fonte(F_SANS, 54, "SemiBold")
-    y += 40
+    fw = fonte(F_SANS, 52, "SemiBold")
+    y += 34
     tw = d.textlength("WhatsApp " + WHATS, font=fw)
     bx0 = (W - tw - 90) / 2
-    d.rounded_rectangle((bx0, y, bx0 + tw + 90, y + 110), radius=55, fill=DOURADO)
-    d.text((bx0 + 45, y + 22), "WhatsApp " + WHATS, font=fw, fill=ESCURO)
-    y += 190
-    fc = fonte(F_SANS, 42, "Medium")
+    d.rounded_rectangle((bx0, y, bx0 + tw + 90, y + 106), radius=53, fill=DOURADO)
+    d.text((bx0 + 45, y + 21), "WhatsApp " + WHATS, font=fw, fill=ESCURO)
+    y += 160
+    fc = fonte(F_SANS, 40, "Medium")
     y = escreve(d, (80, y), ["Toque no link da bio e digite", "o código " + im["codigoAR"]], fc, (231, 210, 160), centro=True, sombra=False)
-    fu = fonte(F_SANS, 34, "Regular")
-    escreve(d, (80, y + 16), ["angelorabeloimoveis.com.br/" + im["codigoAR"]], fu, CINZA, centro=True, sombra=False)
-    fr = fonte(F_SANS, 28, "Medium")
-    escreve(d, (80, H - 230), ["ANGELO RABÊLO · CORRETOR CRECI-PE 9560 · PERITO AVALIADOR"], fr, (159, 146, 123), centro=True, sombra=False)
+    fu = fonte(F_SANS, 32, "Regular")
+    escreve(d, (80, y + 12), ["angelorabeloimoveis.com.br/" + im["codigoAR"]], fu, CINZA, centro=True, sombra=False)
     img.save(destino, "JPEG", quality=95)
 
 

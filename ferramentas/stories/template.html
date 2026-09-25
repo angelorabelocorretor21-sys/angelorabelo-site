@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Jost:wght@400;500;600&display=block" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#1b1611}
+body{font-family:'Jost','Helvetica Neue',Arial,sans-serif;color:#f4ecde;position:relative}
+.foto{position:absolute;inset:0 0 auto 0;height:1250px;background:#2a231a url('{{CAPA}}') center/cover no-repeat}
+.foto::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,16,11,.55) 0%,rgba(20,16,11,0) 26%,rgba(20,16,11,0) 55%,#1b1611 100%)}
+.topo{position:absolute;top:250px;left:72px;right:72px;display:flex;justify-content:space-between;align-items:center;z-index:2}
+.fin{background:#c9a24b;color:#1b1611;font-weight:600;font-size:30px;letter-spacing:.14em;padding:12px 26px;border-radius:6px}
+.marca{background:rgba(27,22,17,.72);padding:16px 22px;border-radius:12px;font-family:'Cormorant Garamond',Georgia,serif;font-weight:700;font-size:40px;text-align:right;line-height:1;text-shadow:0 2px 12px rgba(0,0,0,.5)}
+.marca span{display:block;font-family:'Jost',sans-serif;font-size:20px;font-weight:500;letter-spacing:.24em;color:#e7d2a0;margin-top:8px}
+.info{position:absolute;left:72px;right:72px;bottom:480px;display:flex;flex-direction:column;gap:18px;z-index:2}
+.cod{align-self:flex-start;border:2px solid #c9a24b;color:#e7c77e;font-weight:600;font-size:34px;letter-spacing:.12em;padding:8px 22px;border-radius:40px;background:rgba(27,22,17,.75)}
+h1{text-shadow:0 2px 18px rgba(0,0,0,.45);font-family:'Cormorant Garamond',Georgia,serif;font-weight:700;font-size:74px;line-height:1.02;color:#fbf5ea;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.local{font-size:36px;color:#cdbfa6}
+.feats{font-size:34px;color:#e9dcc3}
+.preco{font-family:'Cormorant Garamond',Georgia,serif;font-weight:700;font-size:96px;color:#e2bd6a;line-height:1}
+.preco small{font-size:44px;color:#cdbfa6}
+.cta{position:absolute;left:72px;right:72px;bottom:250px;background:#f4ecde;color:#1b1611;border-radius:22px;padding:30px 36px;display:flex;flex-direction:column;gap:6px;z-index:2}
+.cta b{font-size:40px;font-weight:600;line-height:1.2}
+.cta .url{font-size:32px;color:#6d5a2c;font-weight:500}
+.rodape{position:absolute;left:72px;right:72px;bottom:190px;font-size:24px;letter-spacing:.12em;color:#9f927b;text-align:center;z-index:2}
+</style></head>
+<body>
+<div class="foto"></div>
+<div class="topo"><span class="fin">{{FINALIDADE}}</span><div class="marca">Angelo Rabêlo<span>IMÓVEIS · PERITO</span></div></div>
+<div class="info">
+  <span class="cod">CÓD. {{CODIGO}}</span>
+  <h1>{{TITULO}}</h1>
+  <div class="local">📍 {{LOCAL}}</div>
+  <div class="feats">{{FEATS}}</div>
+  <div class="preco">{{PRECO}}</div>
+</div>
+<div class="cta"><b>👆 Toque no link da bio e digite o código <span style="white-space:nowrap">{{CODIGO}}</span></b><span class="url">angelorabeloimoveis.com.br/{{CODIGO}}</span></div>
+<div class="rodape">CRECI-PE 9560 · WHATSAPP (81) 99383-7490</div>
+</body></html>

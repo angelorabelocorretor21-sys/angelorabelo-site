@@ -125,3 +125,13 @@
     mount();
   }
 })();
+
+/* Botões "Enviar imóvel pelo WhatsApp" — nas fichas carrega assets/compartilhar.js
+   (a home já inclui o script diretamente). */
+(function () {
+  if (window.RS || document.querySelector('script[src*="compartilhar.js"]')) return;
+  var s = document.createElement("script");
+  s.src = "/assets/compartilhar.js";
+  s.defer = true;
+  document.head.appendChild(s);
+})();

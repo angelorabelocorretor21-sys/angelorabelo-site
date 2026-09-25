@@ -549,7 +549,7 @@ function limparFiltros(){
 function verMais(){ _shown+=12; paint(); }
 /* ---- Lightbox / carrossel ---- */
 let _lb={list:[],idx:0,imovel:null};
-function openLB(codigo){ const i=IMOVEIS.find(x=>String(x.codigo)===String(codigo)); if(!i)return; _lb.imovel=i; _lb.list=(i.fotos&&i.fotos.length?i.fotos:(i.foto?[i.foto]:[])); _lb.idx=0; document.getElementById('lb').classList.add('open'); document.body.style.overflow='hidden'; paintLB(); }
+function openLB(codigo){ const i=IMOVEIS.find(x=>String(x.codigo)===String(codigo)); if(!i)return; _lb.imovel=i; _lb.list=(i.fotos&&i.fotos.length?i.fotos:(i.foto?[i.foto]:[])); _lb.idx=0; if(window.RS)RS.visto(i.codigoAR,'lightbox'); document.getElementById('lb').classList.add('open'); document.body.style.overflow='hidden'; paintLB(); }
 function positionLbBrand(){
   var img=document.getElementById('lb-photo'), bar=document.getElementById('lb-brand');
   if(!img||!bar)return;

@@ -12,6 +12,11 @@
 
   function ev(nome, dados) { try { if (typeof gtag === 'function') gtag('event', nome, dados || {}); } catch (e) {} }
   function urlFicha(cod) { return SITE + '/imovel/' + cod + '/'; }
+  /* Link rastreável: o Google Analytics identifica quem abriu o link enviado
+     (Origem = whatsapp, Campanha = código do imóvel). */
+  function urlEnvio(cod, meio) {
+    return urlFicha(cod) + '?utm_source=whatsapp&utm_medium=' + (meio || 'envio') + '&utm_campaign=' + cod;
+  }
   function brl(n) { return 'R$ ' + Number(n).toLocaleString('pt-BR', { maximumFractionDigits: 0 }); }
 
   /* ---------- dados do imóvel ---------- */
@@ -45,7 +50,7 @@
     if (d.f) s += '🔑 ' + d.f + '\n';
     s += '💰 *' + d.p + '*\n';
     s += 'Cód. ' + d.c + '\n\n';
-    s += '👉 Veja fotos e detalhes:\n' + urlFicha(d.c) + '\n\n' + ASSINATURA;
+    s += '👉 Veja fotos e detalhes:\n' + urlEnvio(d.c, 'envio') + '\n\n' + ASSINATURA;
     return s;
   }
   function msgVarios(lista) {
@@ -54,7 +59,7 @@
     lista.forEach(function (d, k) {
       s += '\n*' + (k + 1) + ') ' + d.t + '*\n';
       s += [d.l, d.p].filter(Boolean).join(' · ') + '\n';
-      s += urlFicha(d.c) + '\n';
+      s += urlEnvio(d.c, 'envio_lista') + '\n';
     });
     s += '\nToque em cada link para ver as fotos e os detalhes.\n\n' + ASSINATURA;
     return s;
@@ -75,12 +80,28 @@
     else fb();
   }
 
+  function dados(cod) { return daLista(cod) || ((daFicha() || {}).c === cod ? daFicha() : null); }
+
+  /* ---------- visualizações ---------- */
+  var vistos = {};
+  function visto(cod, origem) {
+    var d = dados(cod); if (!d) return;
+    var k = cod + '|' + origem; if (vistos[k]) return; vistos[k] = 1;
+    ev('ver_imovel', { codigo: d.c, titulo: d.t, origem: origem });
+  }
+  function chegadaPorLink() {
+    try {
+      var q = new URLSearchParams(location.search), src = q.get('utm_source');
+      var d = daFicha(); if (!d || !src) return;
+      ev('abriu_link_enviado', { codigo: d.c, titulo: d.t, origem: src + (q.get('utm_medium') ? '/' + q.get('utm_medium') : '') });
+    } catch (e) {}
+  }
+
   /* ---------- seleção ---------- */
   var sel = [];
   try { sel = JSON.parse(localStorage.getItem(CHAVE) || '[]') || []; } catch (e) { sel = []; }
   function salvar() { try { localStorage.setItem(CHAVE, JSON.stringify(sel)); } catch (e) {} }
   function idx(cod) { for (var k = 0; k < sel.length; k++) if (sel[k].c === cod) return k; return -1; }
-  function dados(cod) { return daLista(cod) || ((daFicha() || {}).c === cod ? daFicha() : null); }
 
   function toggle(cod, origem) {
     var k = idx(cod);
@@ -92,12 +113,14 @@
 
   function enviar(cod, origem) {
     var d = dados(cod); if (!d) return;
-    ev('enviar_imovel', { codigo: cod, origem: origem || 'card' });
+    ev('enviar_imovel', { codigo: cod, titulo: d.t, origem: origem || 'card' });
     abrirWhats(msgUm(d));
   }
   function enviarSelecao() {
     if (!sel.length) return;
     ev('enviar_selecao', { quantidade: sel.length, codigos: sel.map(function (d) { return d.c; }).join(',') });
+    /* cada imóvel da lista também conta como "enviado" */
+    sel.forEach(function (d) { ev('enviar_imovel', { codigo: d.c, titulo: d.t, origem: 'selecao' }); });
     abrirWhats(msgVarios(sel));
   }
 
@@ -194,12 +217,13 @@
       '<button type="button" class="rs-b" data-rs-sel="' + esc(d.c) + '" aria-pressed="false">＋ Selecionar</button>' +
       '<button type="button" class="rs-b rs-link">🔗 Copiar link</button>';
     alvo.parentNode.insertBefore(box, alvo.nextSibling);
+    visto(d.c, 'ficha'); chegadaPorLink();
     box.querySelector('.rs-env').onclick = function () { enviar(d.c, 'ficha'); };
     box.querySelector('[data-rs-sel]').onclick = function () { toggle(d.c, 'ficha'); };
-    box.querySelector('.rs-link').onclick = function () { copiar(urlFicha(d.c), 'Link copiado'); ev('copiar_link_imovel', { codigo: d.c }); };
+    box.querySelector('.rs-link').onclick = function () { copiar(urlFicha(d.c) + '?utm_source=link_copiado&utm_medium=compartilhamento&utm_campaign=' + d.c, 'Link copiado'); ev('copiar_link_imovel', { codigo: d.c }); };
   }
 
-  window.RS = { enviar: enviar, toggle: toggle, limpar: limpar, botoes: botoes, pintar: pintar, aviso: aviso, enviarSelecao: enviarSelecao };
+  window.RS = { visto: visto, enviar: enviar, toggle: toggle, limpar: limpar, botoes: botoes, pintar: pintar, aviso: aviso, enviarSelecao: enviarSelecao };
 
   function iniciar() {
     montarUI();

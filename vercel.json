@@ -1,0 +1,8 @@
+{
+  "redirects": [
+    { "source": "/AR-:num(\\d{4})", "destination": "/imovel/AR-:num/?utm_source=instagram&utm_medium=legenda&utm_campaign=AR-:num", "permanent": false },
+    { "source": "/ar-:num(\\d{4})", "destination": "/imovel/AR-:num/?utm_source=instagram&utm_medium=legenda&utm_campaign=AR-:num", "permanent": false },
+    { "source": "/Ar-:num(\\d{4})", "destination": "/imovel/AR-:num/?utm_source=instagram&utm_medium=legenda&utm_campaign=AR-:num", "permanent": false },
+    { "source": "/bio", "destination": "/links/?utm_source=instagram&utm_medium=bio", "permanent": false }
+  ]
+}

@@ -1,0 +1,86 @@
+{
+ "data": "2026-09-25",
+ "codigo": "AR-0129",
+ "codigo_rjweb": "1580",
+ "titulo": "HARAS COMPLETO À VENDA EM POMBOS – PE",
+ "tipo": "Casa fora de condomínio",
+ "categoria": "rural",
+ "cidade": "Pombos",
+ "preco": "R$ 1.850.000",
+ "formato": "TOUR",
+ "gancho": "Olha o que está à venda em Pombos",
+ "musica": "mixkit-180.mp3",
+ "fotos_usadas": [
+  0,
+  2,
+  7,
+  1,
+  5,
+  12,
+  8,
+  3
+ ],
+ "reel": {
+  "duracao": 26.5,
+  "resolucao": [
+   1080,
+   1920
+  ],
+  "audio": true,
+  "tamanho_mb": 12.69
+ },
+ "stories": [
+  {
+   "duracao": 5.0,
+   "resolucao": [
+    1080,
+    1920
+   ],
+   "audio": true,
+   "tamanho_mb": 1.24
+  },
+  {
+   "duracao": 5.0,
+   "resolucao": [
+    1080,
+    1920
+   ],
+   "audio": true,
+   "tamanho_mb": 2.33
+  },
+  {
+   "duracao": 5.0,
+   "resolucao": [
+    1080,
+    1920
+   ],
+   "audio": true,
+   "tamanho_mb": 2.45
+  },
+  {
+   "duracao": 5.0,
+   "resolucao": [
+    1080,
+    1920
+   ],
+   "audio": true,
+   "tamanho_mb": 1.14
+  }
+ ],
+ "arquivos": {
+  "reel": "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-09-25_AR-0129/reel.mp4",
+  "capa": "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-09-25_AR-0129/capa.jpg",
+  "stories": [
+   "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-09-25_AR-0129/story1.mp4",
+   "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-09-25_AR-0129/story2.mp4",
+   "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-09-25_AR-0129/story3.mp4",
+   "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-09-25_AR-0129/story4.mp4"
+  ],
+  "legenda": "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-09-25_AR-0129/legenda.txt"
+ },
+ "problemas": [],
+ "avisos": [
+  "Legenda sem o WhatsApp (81) 99383-7490 escrito."
+ ],
+ "aprovado_qc": true
+}

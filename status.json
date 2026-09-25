@@ -1,0 +1,21 @@
+{
+ "id": "teste-gerar-1",
+ "acao": "gerar",
+ "codigo": "AR-0129",
+ "ok": true,
+ "rc": 0,
+ "musicas": 12,
+ "arquivos": [
+  "capa.jpg",
+  "erro.txt",
+  "legenda.txt",
+  "qc.json",
+  "quadros.jpg",
+  "reel.mp4",
+  "resultado.json",
+  "story1.mp4",
+  "story2.mp4",
+  "story3.mp4",
+  "story4.mp4"
+ ]
+}

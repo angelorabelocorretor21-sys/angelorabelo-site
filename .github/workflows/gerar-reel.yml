@@ -1,0 +1,66 @@
+name: gerar-reel
+# Gera o Reel diário (e a folha de fotos) SEM o Mac do Angelo.
+# Disparo: push em pedido/pedido.json nesta branch (reels-nuvem).
+# Resultado: branch reels-saida (reescrita a cada execução), pasta saida/ + status.json.
+on:
+  push:
+    branches: [reels-nuvem]
+    paths: ['pedido/pedido.json']
+permissions:
+  contents: write
+concurrency:
+  group: gerar-reel
+  cancel-in-progress: false
+jobs:
+  gerar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      HOME_REELS: ${{ github.workspace }}/casa
+    steps:
+      - uses: actions/checkout@v4
+      - name: Preparar ambiente
+        run: |
+          set +e
+          sudo apt-get update -qq >/dev/null && sudo apt-get install -y -qq ffmpeg >/dev/null
+          pip install -q pillow
+          git clone -q --depth 1 https://github.com/${{ github.repository }} site
+          mkdir -p "$HOME_REELS/.rabelo-sync/reels-musicas"
+          for id in $(cat pedido/musicas.txt); do
+            curl -sSfL -A "Mozilla/5.0" -o "$HOME_REELS/.rabelo-sync/reels-musicas/mixkit-$id.mp3" "https://assets.mixkit.co/music/$id/$id.mp3" || echo "musica $id falhou"
+          done
+          ls "$HOME_REELS/.rabelo-sync/reels-musicas" | wc -l > musicas_ok.txt
+      - name: Executar pedido
+        run: |
+          set +e
+          export HOME="$HOME_REELS"
+          P=pedido/pedido.json
+          ID=$(python3 -c "import json;print(json.load(open('$P'))['id'])")
+          ACAO=$(python3 -c "import json;print(json.load(open('$P'))['acao'])")
+          COD=$(python3 -c "import json;print(json.load(open('$P')).get('codigo',''))")
+          mkdir -p out/saida
+          if [ "$ACAO" = "fotos" ]; then
+            python3 site/ferramentas/reels/gerar_reel.py fotos "$COD" > out/saida/resultado.json 2> out/saida/erro.txt; RC=$?
+            cp "$HOME/.rabelo-sync/reels-cache/$COD/contato.jpg" out/saida/ 2>/dev/null
+            cp "$HOME/.rabelo-sync/reels-cache/$COD/fotos.json" out/saida/ 2>/dev/null
+          else
+            python3 -c "import json;json.dump(json.load(open('$P'))['roteiro'],open('roteiro.json','w'),ensure_ascii=False)"
+            python3 site/ferramentas/reels/gerar_reel.py gerar roteiro.json > out/saida/resultado.json 2> out/saida/erro.txt; RC=$?
+            D=$(ls -d "$HOME"/.rabelo-sync/reels-saida/*/ 2>/dev/null | head -1)
+            [ -n "$D" ] && cp -r "$D"* out/saida/
+            if [ -f out/saida/reel.mp4 ]; then
+              DUR=$(ffprobe -v error -show_entries format=duration -of csv=p=0 out/saida/reel.mp4 | cut -d. -f1)
+              ffmpeg -loglevel error -i out/saida/reel.mp4 -vf "fps=4/$DUR,scale=270:-1,tile=4x1" -frames:v 1 out/saida/quadros.jpg
+            fi
+          fi
+          python3 - "$ID" "$ACAO" "$COD" "$RC" "$(cat musicas_ok.txt)" <<'PY'
+          import json,sys,os
+          i,a,c,rc,m=sys.argv[1:]
+          json.dump({"id":i,"acao":a,"codigo":c,"ok":rc=="0","rc":int(rc or 1),"musicas":int(m or 0),
+                     "arquivos":sorted(os.listdir("out/saida"))},open("out/status.json","w"),ensure_ascii=False,indent=1)
+          PY
+          printf '{"git":{"deploymentEnabled":false}}\n' > out/vercel.json
+          cd out && git init -q -b reels-saida && git add -A \
+            && git -c user.name="Angelo Rabêlo" -c user.email=angelorabelo.corretor21@gmail.com commit -qm "Saída $ID" \
+            && git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" reels-saida
+          echo "::notice::status $(tr '\n' ' ' < status.json)"

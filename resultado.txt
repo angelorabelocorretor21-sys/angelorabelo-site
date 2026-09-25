@@ -1,6 +1,0 @@
-foto:200 280648
-/home/runner/work/_temp/43ad9d3b-aff2-42a5-bc3a-cf1e7d5ef9b9.sh: line 3: ffmpeg: command not found
-Traceback (most recent call last):
-  File "<string>", line 1, in <module>
-ModuleNotFoundError: No module named 'PIL'
-cloudinary:400

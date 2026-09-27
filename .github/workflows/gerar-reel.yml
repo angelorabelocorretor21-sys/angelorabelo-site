@@ -17,6 +17,7 @@ jobs:
     timeout-minutes: 30
     env:
       HOME_REELS: ${{ github.workspace }}/casa
+      TZ: America/Recife
     steps:
       - uses: actions/checkout@v4
       - name: Preparar ambiente
@@ -38,6 +39,7 @@ jobs:
           ACAO=$(python3 -c "import json;print(json.load(open('$P'))['acao'])")
           COD=$(python3 -c "import json;print(json.load(open('$P')).get('codigo',''))")
           mkdir -p out/saida
+          git clone -q --depth 1 -b reels-saida "https://github.com/${{ github.repository }}" prev 2>/dev/null && cp prev/historico.json out/ 2>/dev/null
           if [ "$ACAO" = "fotos" ]; then
             python3 site/ferramentas/reels/gerar_reel.py fotos "$COD" > out/saida/resultado.json 2> out/saida/erro.txt; RC=$?
             cp "$HOME/.rabelo-sync/reels-cache/$COD/contato.jpg" out/saida/ 2>/dev/null
@@ -55,7 +57,11 @@ jobs:
           python3 - "$ID" "$ACAO" "$COD" "$RC" "$(cat musicas_ok.txt)" <<'PY'
           import json,sys,os
           i,a,c,rc,m=sys.argv[1:]
-          json.dump({"id":i,"acao":a,"codigo":c,"ok":rc=="0","rc":int(rc or 1),"musicas":int(m or 0),
+          import datetime
+          if a=="gerar" and rc=="0" and os.path.exists("out/historico.json"):
+              h=json.load(open("out/historico.json")); h.append({"data":datetime.date.today().isoformat(),"codigo":c,"origem":"pedido","id":i})
+              json.dump(h,open("out/historico.json","w"),ensure_ascii=False,indent=1)
+          json.dump({"id":i,"acao":a,"data":datetime.date.today().isoformat(),"codigo":c,"ok":rc=="0","rc":int(rc or 1),"musicas":int(m or 0),
                      "arquivos":sorted(os.listdir("out/saida"))},open("out/status.json","w"),ensure_ascii=False,indent=1)
           PY
           printf '{"git":{"deploymentEnabled":false}}\n' > out/vercel.json

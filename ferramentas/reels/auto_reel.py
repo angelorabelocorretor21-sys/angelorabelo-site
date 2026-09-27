@@ -122,6 +122,19 @@ def candidatos(hist):
     return do_dia, resto
 
 
+def itens_descricao(im):
+    """Itens em tópico ('•' ou '-') da descrição do cadastro — texto já escrito para o imóvel."""
+    out = []
+    for ln in (im.get("descricao") or "").splitlines():
+        t = ln.strip()
+        if t[:1] in ("•", "-", "▪", "✔") or t.startswith("✅"):
+            t = G.limpa(t.lstrip("•-▪✔✅ ").strip())
+            t = t[:1].upper() + t[1:]
+            if 3 < len(t) <= 60 and "R$" not in t and "whats" not in t.lower():
+                out.append(t)
+    return out
+
+
 def curto(txt, n=45):
     return txt if len(txt) <= n else None
 
@@ -142,16 +155,21 @@ def roteiro(im, hist, fotos_ok):
     fch = G.fichas(im)
     local = G.local_txt(im).replace(" · ", ", ")
     tipo = (im.get("tipo") or "").strip()
-    destaques = []
-    if tipo: destaques.append(tipo if len(tipo) <= 40 else tipo[:40])
-    destaques += fch[:3]
-    if len(destaques) < 3: destaques.append(local)
+    itens = itens_descricao(im)
+    if fch:  # não repetir o que as fichas já dizem
+        itens = [x for x in itens if not any(k in x.lower() for k in ("quarto", "suíte", "suite", "vaga", "m²", "banheiro"))]
+    destaques = list(fch[:3])
+    destaques += [x for x in itens if len(x) <= 34][: max(0, 4 - len(destaques) - 1)]
+    destaques.append(local)
+    if len(destaques) < 2 and tipo: destaques.insert(0, tipo[:40])
     destaques = destaques[:4]
     preco = G.preco_txt(im)
     cta = CTAS[semente % len(CTAS)]
     titulo = (im.get("titulo") or tipo).strip()
     linhas = [gancho, "", f"🏡 {titulo}", f"📍 {local}", ""]
-    linhas += [f"✅ {x}" for x in ([tipo] if tipo else []) + fch[:5]]
+    ck = ([tipo] if tipo else []) + fch[:5]
+    ck += [x for x in itens if x.lower() not in " ".join(ck).lower()][: max(0, 7 - len(ck))]
+    linhas += [f"✅ {x}" for x in ck]
     linhas += ["", f"💰 {preco}", "", f"{cta}! Salve e envie para quem procura imóvel em {cid}.",
                f"📲 WhatsApp {G.WHATS}", "", f"— Angelo Rabêlo · Corretor CRECI-PE {G.CRECI} · Perito Avaliador"]
     # fotos: capa = melhor nota entre as boas; resto na ordem do cadastro

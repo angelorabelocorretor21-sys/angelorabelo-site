@@ -1,0 +1,76 @@
+name: reel-diario-auto
+# Gera SOZINHO o Reel + Stories do dia (sem Mac, sem push de ninguém).
+# Roda às 17:07, 17:37 e 18:07 (Recife). Se o Reel de hoje já foi gerado, as rodadas seguintes não fazem nada.
+# Resultado: branch reels-saida (saida/ + status.json + historico.json). A tarefa do Claude das 18:40 lê, confere e publica.
+on:
+  schedule:
+    - cron: '7 20 * * *'
+    - cron: '37 20 * * *'
+    - cron: '7 21 * * *'
+  workflow_dispatch:
+    inputs:
+      forcar:
+        description: 'Gerar de novo mesmo que já exista o Reel de hoje (sim/nao)'
+        default: 'nao'
+permissions:
+  contents: write
+concurrency:
+  group: gerar-reel
+  cancel-in-progress: false
+jobs:
+  gerar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      TZ: America/Recife
+      CASA: ${{ github.workspace }}/casa
+    steps:
+      - uses: actions/checkout@v4
+      - name: Reel de hoje já existe?
+        id: check
+        run: |
+          HOJE=$(date +%F)
+          git clone -q --depth 1 -b reels-saida "https://github.com/${{ github.repository }}" prev 2>/dev/null || mkdir -p prev
+          FEITO=$(python3 -c "import json,sys;s=json.load(open('prev/status.json'));print('sim' if s.get('data')=='$HOJE' and s.get('ok') and s.get('acao')=='auto' else 'nao')" 2>/dev/null || echo nao)
+          [ "${{ github.event.inputs.forcar }}" = "sim" ] && FEITO=nao
+          echo "feito=$FEITO" >> "$GITHUB_OUTPUT"
+          echo "Reel de hoje ($HOJE) já existe: $FEITO"
+      - name: Preparar ambiente
+        if: steps.check.outputs.feito == 'nao'
+        run: |
+          set +e
+          sudo apt-get update -qq >/dev/null && sudo apt-get install -y -qq ffmpeg python3-pil >/dev/null
+          mkdir -p "$CASA/.rabelo-sync/reels-musicas"
+          for id in $(cat ferramentas/reels/musicas.txt); do
+            curl -sSfL -A "Mozilla/5.0" -o "$CASA/.rabelo-sync/reels-musicas/mixkit-$id.mp3" "https://assets.mixkit.co/music/$id/$id.mp3" || echo "musica $id falhou"
+          done
+          ls "$CASA/.rabelo-sync/reels-musicas" | wc -l > musicas_ok.txt
+      - name: Gerar Reel do dia
+        if: steps.check.outputs.feito == 'nao'
+        run: |
+          set +e
+          export HOME="$CASA"
+          HOJE=$(date +%F)
+          mkdir -p out/saida
+          if [ -f prev/historico.json ]; then cp prev/historico.json out/historico.json; else cp ferramentas/reels/historico-inicial.json out/historico.json; fi
+          /usr/bin/python3 ferramentas/reels/auto_reel.py out/historico.json out/saida > out/saida/resultado.json 2> out/saida/erro.txt; RC=$?
+          cat out/saida/resultado.json
+          if [ -f out/saida/reel.mp4 ]; then
+            DUR=$(ffprobe -v error -show_entries format=duration -of csv=p=0 out/saida/reel.mp4)
+            ffmpeg -loglevel error -i out/saida/reel.mp4 -vf "fps=8/$DUR,scale=270:-1,tile=4x2" -frames:v 1 out/saida/quadros.jpg
+          fi
+          python3 - "$HOJE" "$RC" "$(cat musicas_ok.txt)" <<'PY'
+          import json,sys,os
+          hoje,rc,m=sys.argv[1:]
+          try: r=json.load(open("out/saida/resultado.json"))
+          except Exception: r={}
+          json.dump({"id":"auto-"+hoje,"acao":"auto","data":hoje,"codigo":r.get("codigo",""),"ok":rc=="0" and os.path.exists("out/saida/reel.mp4"),
+                     "rc":int(rc or 1),"musicas":int(m or 0),"categoria_dia":r.get("categoria_dia"),"tentativas":r.get("tentativas",[]),
+                     "arquivos":sorted(os.listdir("out/saida"))},open("out/status.json","w"),ensure_ascii=False,indent=1)
+          PY
+          cat out/status.json
+          printf '{"git":{"deploymentEnabled":false}}\n' > out/vercel.json
+          cd out && git init -q -b reels-saida && git add -A \
+            && git -c user.name="Angelo Rabêlo" -c user.email=angelorabelo.corretor21@gmail.com commit -qm "Reel auto $HOJE" \
+            && git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" reels-saida
+          echo "::notice::status $(tr '\n' ' ' < status.json)"

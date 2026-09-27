@@ -1,0 +1,40 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1080px;overflow:hidden;background:#17241a;font-family:Montserrat,sans-serif}
+.foto{position:absolute;left:0;top:0;width:1080px;height:730px;object-fit:cover}
+.shade{position:absolute;left:0;top:0;width:1080px;height:730px;
+  background:linear-gradient(180deg,rgba(0,0,0,.38) 0%,rgba(0,0,0,0) 22%,rgba(0,0,0,0) 72%,rgba(23,36,26,.55) 100%)}
+.cod{position:absolute;left:44px;top:44px;background:#8e1f2e;color:#fff;font-weight:700;
+  font-size:30px;letter-spacing:2px;padding:12px 22px;border-radius:10px}
+.logo{position:absolute;right:40px;top:36px;background:#fff;border-radius:14px;padding:12px 18px;
+  box-shadow:0 6px 20px rgba(0,0,0,.25)}
+.logo img{height:92px;display:block}
+.painel{position:absolute;left:0;top:730px;width:1080px;height:350px;background:#17241a;padding:30px 48px 0}
+.painel:before{content:"";position:absolute;left:0;top:0;width:1080px;height:8px;background:#8e1f2e}
+.meta{color:#c9bfa8;font-size:24px;font-weight:600;letter-spacing:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.titulo{color:#fff;font-size:36px;font-weight:600;line-height:1.18;margin-top:10px;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.linha{position:absolute;left:48px;right:48px;bottom:74px;display:flex;align-items:flex-end;justify-content:space-between}
+.fin{color:#c9bfa8;font-size:20px;font-weight:700;letter-spacing:3px}
+.preco{color:#fff;font-size:64px;font-weight:800;line-height:1;margin-top:6px;white-space:nowrap}
+.preco small{font-size:30px;font-weight:600;color:#c9bfa8;margin-left:4px}
+.rodape{position:absolute;left:0;bottom:0;width:1080px;height:52px;background:#0f1912;color:#c9bfa8;font-size:20px;font-weight:600;letter-spacing:1.5px;display:flex;align-items:center;justify-content:space-between;padding:0 48px}
+.specs{color:#e8e1d2;font-size:24px;font-weight:500;text-align:right;max-width:420px;line-height:1.35}
+</style></head>
+<body>
+<img class="foto" src="{{FOTO}}">
+<div class="shade"></div>
+<div class="cod">{{AR}}</div>
+<div class="logo"><img src="{{LOGO}}"></div>
+<div class="painel">
+  <div class="meta">{{TIPO}} · {{LOCAL}}</div>
+  <div class="titulo">{{TITULO}}</div>
+  <div class="linha">
+    <div><div class="fin">{{FINALIDADE}}</div><div class="preco">{{PRECO}}</div></div>
+    <div class="specs">{{SPECS}}</div>
+  </div>
+  <div class="rodape"><span>WHATSAPP (81) 99383-7490</span><span>ANGELORABELOIMOVEIS.COM.BR</span></div>
+</div>
+</body></html>

@@ -1,0 +1,35 @@
+name: catalogo-meta
+# Mantém o catálogo do WhatsApp Business / Meta igual ao site, sem Mac:
+# miniaturas 1080x1080 (novas e as de imóveis que mudaram) + catalogo/meta-feed.csv.
+# A Meta busca o feed sozinha todo dia às 18:10. Roda às 06:52 (Recife), a cada atualização do index.html e manualmente.
+on:
+  schedule:
+    - cron: '52 9 * * *'
+  push:
+    branches: [main]
+    paths: ['index.html']
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: catalogo-meta
+  cancel-in-progress: false
+jobs:
+  catalogo:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Miniaturas e feed
+        run: |
+          sudo apt-get update -qq >/dev/null && sudo apt-get install -y -qq python3-pil fonts-montserrat >/dev/null
+          fc-cache -f >/dev/null
+          export CHROME=$(command -v google-chrome || command -v google-chrome-stable || command -v chromium)
+          /usr/bin/python3 ferramentas/catalogo/catalogo.py | tee resultado.txt
+      - name: Publicar no site
+        run: |
+          git add catalogo
+          if git diff --cached --quiet; then echo "Catálogo sem mudanças."; exit 0; fi
+          git -c user.name="Angelo Rabêlo" -c user.email=angelorabelo.corretor21@gmail.com commit -qm "Catálogo Meta/WhatsApp atualizado (automático)"
+          git pull -q --rebase origin main && git push -q origin main
+          echo "::notice::$(tr '\n' ' ' < resultado.txt)"

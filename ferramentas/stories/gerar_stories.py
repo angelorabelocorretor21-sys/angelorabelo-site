@@ -6,7 +6,7 @@ gerar_stories.py — cria a arte de Story (1080x1920, JPEG) de cada imóvel do s
 Saída: assets/stories/AR-XXXX.jpg (servida em https://www.angelorabeloimoveis.com.br/assets/stories/AR-XXXX.jpg,
 usada pela tarefa diária que publica 1 Story por dia via Windsor.ai create_story).
 
-Roda no Mac do Angelo (só biblioteca padrão + Google Chrome em modo headless + sips):
+Roda no GitHub Actions (workflow stories-imoveis, diário e a cada sincronização) ou no Mac do Angelo (só biblioteca padrão + Google Chrome em modo headless + sips):
     cd ~/.rabelo-sync/angelorabelo-site && python3 ferramentas/stories/gerar_stories.py          # só os que faltam
     python3 ferramentas/stories/gerar_stories.py --todos                                        # refaz todos
     python3 ferramentas/stories/gerar_stories.py AR-0125 AR-0126                                # só estes
@@ -16,7 +16,7 @@ import html, json, os, re, subprocess, sys, tempfile
 
 RAIZ = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 SAIDA = os.path.join(RAIZ, "assets", "stories")
-CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+CHROME = os.environ.get("CHROME") or "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 TEMPLATE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "template.html")
 
 
@@ -73,9 +73,23 @@ def pagina(i, capa_url):
     return t
 
 
-def capa_local(i):
+def capa_local(i, tmp=None):
     p = os.path.join(RAIZ, "assets", "imoveis", i["codigoAR"] + ".jpg")
-    return p if os.path.exists(p) else None
+    if os.path.exists(p):
+        return p
+    # sem capa local (imóveis novos): baixa a 1ª foto do cadastro (funciona no GitHub Actions e no Mac)
+    urls = ([i["foto"]] if i.get("foto") else []) + list(i.get("fotos") or [])
+    for u in urls[:3]:
+        try:
+            import io, urllib.request
+            from PIL import Image
+            dados = urllib.request.urlopen(urllib.request.Request(u, headers={"User-Agent": "Mozilla/5.0 RabeloStories/1.0"}), timeout=30).read()
+            dst = os.path.join(tmp or tempfile.gettempdir(), i["codigoAR"] + "_capa.jpg")
+            Image.open(io.BytesIO(dados)).convert("RGB").save(dst, "JPEG", quality=92)
+            return dst
+        except Exception:
+            continue
+    return None
 
 
 def render_chrome(html_path, png_path):
@@ -115,9 +129,9 @@ def main():
         destino = os.path.join(SAIDA, cod + ".jpg")
         if os.path.exists(destino) and not todos and not args:
             continue
-        capa = capa_local(i)
+        capa = capa_local(i, tmp)
         if not capa:
-            pulados.append(cod + " (sem capa local em assets/imoveis)")
+            pulados.append(cod + " (sem capa: nem local nem foto do cadastro)")
             continue
         hp = os.path.join(tmp, cod + ".html")
         open(hp, "w", encoding="utf-8").write(pagina(i, "file://" + capa))

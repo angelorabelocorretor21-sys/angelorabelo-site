@@ -1,0 +1,33 @@
+name: stories-imoveis
+# Gera a arte de Story (assets/stories/AR-XXXX.jpg) dos imóveis que ainda não têm, sem depender do Mac.
+# Roda todo dia às 06:47 (Recife), a cada atualização do index.html (sincronização de imóveis) e manualmente.
+on:
+  schedule:
+    - cron: '47 9 * * *'
+  push:
+    branches: [main]
+    paths: ['index.html']
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: stories-imoveis
+  cancel-in-progress: false
+jobs:
+  stories:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Gerar artes que faltam
+        run: |
+          sudo apt-get update -qq >/dev/null && sudo apt-get install -y -qq python3-pil fonts-noto-color-emoji >/dev/null
+          export CHROME=$(command -v google-chrome || command -v google-chrome-stable || command -v chromium)
+          /usr/bin/python3 ferramentas/stories/gerar_stories.py | tee resultado.txt
+      - name: Publicar no site
+        run: |
+          git add assets/stories
+          if git diff --cached --quiet; then echo "Nenhuma arte nova."; exit 0; fi
+          git -c user.name="Angelo Rabêlo" -c user.email=angelorabelo.corretor21@gmail.com commit -qm "Stories de imóveis novos (automático)"
+          git pull -q --rebase origin main && git push -q origin main
+          echo "::notice::$(head -1 resultado.txt)"

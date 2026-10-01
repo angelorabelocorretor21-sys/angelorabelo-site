@@ -1,16 +1,19 @@
 name: reel-diario-auto
-# Gera SOZINHO o Reel + Stories do dia (sem Mac, sem push de ninguém).
-# Roda às 17:07, 17:37 e 18:07 (Recife). Se o Reel de hoje já foi gerado, as rodadas seguintes não fazem nada.
-# Resultado: branch reels-saida (saida/ + status.json + historico.json). A tarefa do Claude das 18:40 lê, confere e publica.
+# Gera SOZINHO os 2 Reels + Stories do dia, de 2 imóveis diferentes (sem Mac, sem push de ninguém).
+# Desde 01/10/2026: roda às 09:07, 10:07, 11:07, 12:07 e 13:07 (Recife) — bem antes da conferência das 14:30,
+# porque o agendamento do GitHub chegou a atrasar 2h40. Se os Reels de hoje já existem, as rodadas seguintes não fazem nada.
+# Resultado: branch reels-saida — saida/ (Reel 1, publicado às 18h), saida2/ (Reel 2, às 20h), status.json, historico.json.
 on:
   schedule:
-    - cron: '7 20 * * *'
-    - cron: '37 20 * * *'
-    - cron: '7 21 * * *'
+    - cron: '7 12 * * *'
+    - cron: '7 13 * * *'
+    - cron: '7 14 * * *'
+    - cron: '7 15 * * *'
+    - cron: '7 16 * * *'
   workflow_dispatch:
     inputs:
       forcar:
-        description: 'Gerar de novo mesmo que já exista o Reel de hoje (sim/nao)'
+        description: 'Gerar de novo os 2 Reels de hoje com outros imóveis (sim/nao)'
         default: 'nao'
 permissions:
   contents: write
@@ -31,7 +34,7 @@ jobs:
         run: |
           HOJE=$(date +%F)
           git clone -q --depth 1 -b reels-saida "https://github.com/${{ github.repository }}" prev 2>/dev/null || mkdir -p prev
-          FEITO=$(python3 -c "import json,sys;s=json.load(open('prev/status.json'));print('sim' if s.get('data')=='$HOJE' and s.get('ok') and s.get('acao')=='auto' else 'nao')" 2>/dev/null || echo nao)
+          FEITO=$(python3 -c "import json,sys;s=json.load(open('prev/status.json'));print('sim' if s.get('data')=='$HOJE' and s.get('ok') and s.get('ok2') and s.get('acao')=='auto' else 'nao')" 2>/dev/null || echo nao)
           [ "${{ github.event.inputs.forcar }}" = "sim" ] && FEITO=nao
           echo "feito=$FEITO" >> "$GITHUB_OUTPUT"
           echo "Reel de hoje ($HOJE) já existe: $FEITO"
@@ -51,22 +54,39 @@ jobs:
           set +e
           export HOME="$CASA"
           HOJE=$(date +%F)
-          mkdir -p out/saida
+          mkdir -p out/saida out/saida2
           if [ -f prev/historico.json ]; then cp prev/historico.json out/historico.json; else cp ferramentas/reels/historico-inicial.json out/historico.json; fi
-          /usr/bin/python3 ferramentas/reels/auto_reel.py out/historico.json out/saida > out/saida/resultado.json 2> out/saida/erro.txt; RC=$?
-          cat out/saida/resultado.json
-          if [ -f out/saida/reel.mp4 ]; then
-            DUR=$(ffprobe -v error -show_entries format=duration -of csv=p=0 out/saida/reel.mp4)
-            ffmpeg -loglevel error -i out/saida/reel.mp4 -vf "fps=8/$DUR,scale=270:-1,tile=4x2" -frames:v 1 out/saida/quadros.jpg
+          # Rodada repetida com o Reel 1 de hoje já pronto (só o 2 falhou): reaproveita o Reel 1 e o histórico
+          if python3 -c "import json,sys;s=json.load(open('prev/status.json'));sys.exit(0 if s.get('data')=='$HOJE' and s.get('ok') else 1)" 2>/dev/null \
+             && [ "${{ github.event.inputs.forcar }}" != "sim" ] && [ -f prev/saida/reel.mp4 ]; then
+            cp -r prev/saida/. out/saida/; RC=0
+          else
+            # forçar = sim: os imóveis já gerados hoje continuam no histórico, então saem 2 imóveis NOVOS
+            /usr/bin/python3 ferramentas/reels/auto_reel.py out/historico.json out/saida 1 > out/saida/resultado.json 2> out/saida/erro.txt; RC=$?
           fi
-          python3 - "$HOJE" "$RC" "$(cat musicas_ok.txt)" <<'PY'
+          /usr/bin/python3 ferramentas/reels/auto_reel.py out/historico.json out/saida2 2 > out/saida2/resultado.json 2> out/saida2/erro.txt; RC2=$?
+          cat out/saida/resultado.json out/saida2/resultado.json
+          for d in out/saida out/saida2; do
+            if [ -f $d/reel.mp4 ]; then
+              DUR=$(ffprobe -v error -show_entries format=duration -of csv=p=0 $d/reel.mp4)
+              ffmpeg -y -loglevel error -i $d/reel.mp4 -vf "fps=8/$DUR,scale=270:-1,tile=4x2" -frames:v 1 $d/quadros.jpg
+            fi
+          done
+          python3 - "$HOJE" "$RC" "$RC2" "$(cat musicas_ok.txt)" <<'PY'
           import json,sys,os
-          hoje,rc,m=sys.argv[1:]
-          try: r=json.load(open("out/saida/resultado.json"))
-          except Exception: r={}
-          json.dump({"id":"auto-"+hoje,"acao":"auto","data":hoje,"codigo":r.get("codigo",""),"ok":rc=="0" and os.path.exists("out/saida/reel.mp4"),
-                     "rc":int(rc or 1),"musicas":int(m or 0),"categoria_dia":r.get("categoria_dia"),"tentativas":r.get("tentativas",[]),
-                     "arquivos":sorted(os.listdir("out/saida"))},open("out/status.json","w"),ensure_ascii=False,indent=1)
+          hoje,rc,rc2,m=sys.argv[1:]
+          def ler(p):
+              try: return json.load(open(p))
+              except Exception: return {}
+          r,r2=ler("out/saida/resultado.json"),ler("out/saida2/resultado.json")
+          ok=rc=="0" and os.path.exists("out/saida/reel.mp4")
+          ok2=rc2=="0" and os.path.exists("out/saida2/reel.mp4")
+          json.dump({"id":"auto-"+hoje,"acao":"auto","data":hoje,
+                     "codigo":r.get("codigo",""),"ok":ok,"rc":int(rc or 1),"categoria_dia":r.get("categoria_dia"),"tentativas":r.get("tentativas",[]),
+                     "codigo2":r2.get("codigo",""),"ok2":ok2,"rc2":int(rc2 or 1),"categoria_dia2":r2.get("categoria_dia"),"tentativas2":r2.get("tentativas",[]),
+                     "musicas":int(m or 0),
+                     "arquivos":sorted(os.listdir("out/saida")),"arquivos2":sorted(os.listdir("out/saida2"))},
+                    open("out/status.json","w"),ensure_ascii=False,indent=1)
           PY
           cat out/status.json
           printf '{"git":{"deploymentEnabled":false}}\n' > out/vercel.json

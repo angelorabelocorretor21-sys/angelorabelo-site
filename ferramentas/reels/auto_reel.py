@@ -8,7 +8,9 @@ melhores pela nota de qualidade, monta o roteiro SÓ com dados do cadastro (inde
 gerar_reel.py. Se o QC recusar, tenta o próximo candidato (até 4).
 
 Uso:
-  python3 ferramentas/reels/auto_reel.py <historico.json> <pasta_saida>
+  python3 ferramentas/reels/auto_reel.py <historico.json> <pasta_saida> [vaga]
+  vaga = 1 (padrão, Reel das 18h, categoria do dia) ou 2 (Reel das 20h, categoria complementar —
+  sempre um imóvel diferente do Reel 1, porque o Reel 1 já entrou no historico.json de hoje).
 Grava em <pasta_saida>: reel.mp4, story*.mp4, capa.jpg, legenda.txt, qc.json, roteiro.json,
 contato.jpg, e <historico.json> atualizado. Imprime um JSON de resumo.
 """
@@ -20,6 +22,9 @@ sys.path.insert(0, AQUI)
 import gerar_reel as G  # noqa: E402
 
 HOJE = datetime.datetime.now(ZoneInfo("America/Recife")).date()
+VAGA = int(sys.argv[3]) if len(sys.argv) > 3 and sys.argv[3].isdigit() else 1
+# Vaga 2 usa a categoria de 3 dias à frente (ex.: Seg residencial + Qui rural) para variar o tipo de imóvel
+DIA_CAT = (HOJE.weekday() + (3 if VAGA == 2 else 0)) % 7
 DIAS_RODIZIO = 45
 MIN_FOTOS = 7
 FORMATOS = ["TOUR", "ESTILO_DE_VIDA", "LISTA", "CURIOSIDADE", "PRECO", "OPORTUNIDADE", "LOCALIZACAO", "INVESTIMENTO"]
@@ -65,8 +70,10 @@ def hashtags(im, cat):
     elif "chácara" in t or "chacara" in t: tags.append("#ChacaraAVenda")
     elif "haras" in t: tags.append("#Haras")
     elif cat == "terreno": tags.append("#TerrenoAVenda")
+    elif "flat" in t: tags.append("#FlatAVenda")
     elif "apart" in t: tags.append("#ApartamentoAVenda")
-    elif "condom" in t: tags.append("#CasaEmCondominio")
+    elif "condom" in t and "casa" in t: tags.append("#CasaEmCondominio")
+    elif "condom" in t: tags.append("#ImovelEmCondominio")
     elif cat == "comercial": tags.append("#ImovelComercial")
     else: tags.append("#CasaAVenda")
     tags += ["#AgrestePernambucano", "#ImoveisPernambuco", "#AngeloRabeloImoveis"]
@@ -110,7 +117,7 @@ def candidatos(hist):
         if len(im.get("fotos") or []) < MIN_FOTOS or not valor(im):
             continue
         base.append(im)
-    dia = HOJE.weekday()
+    dia = DIA_CAT
     do_dia = [im for im in base if categoria_do_dia(im, dia)]
     def chave(im):
         n = int((im["codigoAR"].split("-")[1]) or 0)
@@ -144,7 +151,7 @@ def roteiro(im, hist, fotos_ok):
     cid = (im.get("cidade") or "").strip() or "Pernambuco"
     usados_g = [h.get("gancho") for h in hist[-14:]]
     usados_f = [h.get("formato") for h in hist[-3:]]
-    semente = HOJE.toordinal()
+    semente = HOJE.toordinal() + (7 if VAGA == 2 else 0)
     ganchos = [g.format(c=cid) for g in GANCHOS[cat]]
     ganchos = [g for g in ganchos if curto(g) and g not in usados_g] or [g.format(c=cid) for g in GANCHOS[cat]]
     gancho = ganchos[semente % len(ganchos)]
@@ -217,12 +224,12 @@ def main():
         for f in os.listdir(out):
             shutil.copy(os.path.join(out, f), saida)
         G.contato(fotos, os.path.join(saida, "contato.jpg"))
-        hist.append({"data": HOJE.isoformat(), "codigo": cod, "formato": R["formato"], "gancho": R["gancho"], "origem": "auto"})
+        hist.append({"data": HOJE.isoformat(), "codigo": cod, "formato": R["formato"], "gancho": R["gancho"], "origem": "auto", "vaga": VAGA})
         json.dump(hist, open(hist_path, "w"), ensure_ascii=False, indent=1)
-        print(json.dumps({"ok": True, "data": HOJE.isoformat(), "codigo": cod, "categoria_dia": NOMES_DIA[HOJE.weekday()],
+        print(json.dumps({"ok": True, "data": HOJE.isoformat(), "codigo": cod, "categoria_dia": NOMES_DIA[DIA_CAT], "vaga": VAGA,
                           "na_categoria": im in do_dia, "tentativas": tentativas}, ensure_ascii=False))
         return 0
-    print(json.dumps({"ok": False, "data": HOJE.isoformat(), "tentativas": tentativas}, ensure_ascii=False))
+    print(json.dumps({"ok": False, "data": HOJE.isoformat(), "vaga": VAGA, "tentativas": tentativas}, ensure_ascii=False))
     return 1
 
 

@@ -1,0 +1,43 @@
+name: reels-site
+# Coloca no site (assets/reels/) os Reels do dia que já foram gerados na branch reels-saida.
+# Roda às 21:17 e 00:17 (Recife), depois dos horários de publicação (18h e 20h), e manualmente.
+# Manual: o campo "extras" aceita uma linha por vídeo: "AR-0060 2026-09-25 https://link-do-video.mp4".
+# O site lê assets/reels/reels.json (assets/reels.js): seção "Vídeos" na página inicial, botão no
+# visualizador de fotos, selo "Vídeo" nos cards e o vídeo no topo da ficha /imovel/AR-XXXX/.
+on:
+  schedule:
+    - cron: '17 0 * * *'
+    - cron: '17 3 * * *'
+  workflow_dispatch:
+    inputs:
+      extras:
+        description: 'Vídeos extras, um por linha ou separados por ";": AR-XXXX AAAA-MM-DD https://...mp4'
+        default: ''
+permissions:
+  contents: write
+concurrency:
+  group: reels-site
+  cancel-in-progress: false
+jobs:
+  copiar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Copiar Reels para o site
+        env:
+          EXTRAS: ${{ github.event.inputs.extras }}
+        run: |
+          sudo apt-get update -qq >/dev/null && sudo apt-get install -y -qq ffmpeg >/dev/null
+          git clone -q --depth 1 -b reels-saida "https://github.com/${{ github.repository }}" saida-reels || mkdir -p saida-reels
+          ARGS=()
+          for d in saida-reels/saida saida-reels/saida2; do [ -d "$d" ] && ARGS+=(--pasta "$d"); done
+          [ -n "$EXTRAS" ] && ARGS+=(--extra "$EXTRAS")
+          python3 ferramentas/reels/site_videos.py "${ARGS[@]}" | tee resultado.txt
+      - name: Publicar no site
+        run: |
+          git add -A assets/reels
+          if git diff --cached --quiet; then echo "Nenhum vídeo novo."; exit 0; fi
+          git -c user.name="Angelo Rabêlo" -c user.email=angelorabelo.corretor21@gmail.com commit -qm "Vídeos dos Reels no site (automático)"
+          for i in 1 2 3; do git pull -q --rebase origin main && git push -q origin main && break; sleep 5; done
+          echo "::notice::$(tail -1 resultado.txt)"

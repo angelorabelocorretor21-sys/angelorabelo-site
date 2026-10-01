@@ -135,3 +135,12 @@
   s.defer = true;
   document.head.appendChild(s);
 })();
+
+/* Vídeos dos Reels (home e fichas) — carrega assets/reels.js, que lê assets/reels/reels.json. */
+(function () {
+  if (window.__reelsSite || document.querySelector('script[src*="reels.js"]')) return;
+  var s = document.createElement("script");
+  s.src = "/assets/reels.js";
+  s.defer = true;
+  document.head.appendChild(s);
+})();

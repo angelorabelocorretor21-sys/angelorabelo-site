@@ -5,5 +5,40 @@
   "video": "/assets/reels/AR-0139.mp4",
   "capa": "/assets/reels/AR-0139.jpg",
   "duracao": 31.0
+ },
+ {
+  "codigo": "AR-0087",
+  "data": "2026-09-29",
+  "video": "/assets/reels/AR-0087.mp4",
+  "capa": "/assets/reels/AR-0087.jpg",
+  "duracao": 31.0
+ },
+ {
+  "codigo": "AR-0134",
+  "data": "2026-09-28",
+  "video": "/assets/reels/AR-0134.mp4",
+  "capa": "/assets/reels/AR-0134.jpg",
+  "duracao": 31.0
+ },
+ {
+  "codigo": "AR-0057",
+  "data": "2026-09-27",
+  "video": "/assets/reels/AR-0057.mp4",
+  "capa": "/assets/reels/AR-0057.jpg",
+  "duracao": 29.8
+ },
+ {
+  "codigo": "AR-0130",
+  "data": "2026-09-26",
+  "video": "/assets/reels/AR-0130.mp4",
+  "capa": "/assets/reels/AR-0130.jpg",
+  "duracao": 29.7
+ },
+ {
+  "codigo": "AR-0060",
+  "data": "2026-09-25",
+  "video": "/assets/reels/AR-0060.mp4",
+  "capa": "/assets/reels/AR-0060.jpg",
+  "duracao": 31.0
  }
 ]

@@ -1,0 +1,92 @@
+[
+ {
+  "data": "2026-09-25",
+  "codigo": "AR-0060",
+  "formato": "TOUR",
+  "gancho": "Uma casa com 9 quartos em Gravatá",
+  "origem": "manual"
+ },
+ {
+  "data": "2026-09-26",
+  "codigo": "AR-0130",
+  "formato": "LISTA",
+  "gancho": "Uma mansão com 12 suítes em Gravatá",
+  "origem": "manual"
+ },
+ {
+  "data": "2026-09-27",
+  "codigo": "AR-0057",
+  "formato": "CURIOSIDADE",
+  "gancho": "Uma propriedade rural para conhecer",
+  "origem": "auto"
+ },
+ {
+  "data": "2026-09-28",
+  "codigo": "AR-0134",
+  "formato": "LOCALIZACAO",
+  "gancho": "Um lar pensado para a família",
+  "origem": "auto"
+ },
+ {
+  "data": "2026-09-29",
+  "codigo": "AR-0087",
+  "formato": "TOUR",
+  "gancho": "Repare nos detalhes deste imóvel",
+  "origem": "auto"
+ },
+ {
+  "data": "2026-09-30",
+  "codigo": "AR-0139",
+  "formato": "LISTA",
+  "gancho": "Olha o que está à venda em Sairé",
+  "origem": "auto"
+ },
+ {
+  "data": "2026-10-01",
+  "codigo": "AR-0105",
+  "formato": "PRECO",
+  "gancho": "Esse pode ser o seu refúgio no campo",
+  "origem": "auto",
+  "vaga": 1
+ },
+ {
+  "data": "2026-10-01",
+  "codigo": "AR-0001",
+  "formato": "OPORTUNIDADE",
+  "gancho": "Seu negócio merece este espaço",
+  "origem": "auto",
+  "vaga": 2
+ },
+ {
+  "data": "2026-10-02",
+  "codigo": "AR-0017",
+  "formato": "LOCALIZACAO",
+  "gancho": "Seu refúgio no Agreste",
+  "origem": "auto",
+  "vaga": 1
+ },
+ {
+  "data": "2026-10-02",
+  "codigo": "AR-0140",
+  "formato": "LISTA",
+  "gancho": "Quanto você pagaria por este imóvel?",
+  "origem": "auto",
+  "vaga": 2
+ },
+ {
+  "data": "2026-10-03",
+  "codigo": "AR-0138",
+  "formato": "TOUR",
+  "gancho": "Esse pode ser o seu novo lar",
+  "origem": "auto",
+  "vaga": 1
+ },
+ {
+  "data": "2026-10-03",
+  "codigo": "AR-0136",
+  "formato": "OPORTUNIDADE",
+  "gancho": "Este imóvel em Recife chama atenção",
+  "origem": "auto",
+  "vaga": 2
+ }
+]

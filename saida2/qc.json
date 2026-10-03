@@ -1,0 +1,86 @@
+{
+ "data": "2026-10-03",
+ "codigo": "AR-0136",
+ "codigo_rjweb": "1604",
+ "titulo": "Apartamento na Av. Boa Viagem, Recife-PE",
+ "tipo": "Apartamento em condomínio",
+ "categoria": "urbano",
+ "cidade": "Recife",
+ "preco": "R$ 3.350.000",
+ "formato": "OPORTUNIDADE",
+ "gancho": "Este imóvel em Recife chama atenção",
+ "musica": "mixkit-27.mp3",
+ "fotos_usadas": [
+  0,
+  1,
+  2,
+  3,
+  4,
+  6,
+  8,
+  9,
+  10,
+  11
+ ],
+ "reel": {
+  "duracao": 31.0,
+  "resolucao": [
+   1080,
+   1920
+  ],
+  "audio": true,
+  "tamanho_mb": 13.1
+ },
+ "stories": [
+  {
+   "duracao": 5.0,
+   "resolucao": [
+    1080,
+    1920
+   ],
+   "audio": true,
+   "tamanho_mb": 1.37
+  },
+  {
+   "duracao": 5.0,
+   "resolucao": [
+    1080,
+    1920
+   ],
+   "audio": true,
+   "tamanho_mb": 2.07
+  },
+  {
+   "duracao": 5.0,
+   "resolucao": [
+    1080,
+    1920
+   ],
+   "audio": true,
+   "tamanho_mb": 1.86
+  },
+  {
+   "duracao": 5.0,
+   "resolucao": [
+    1080,
+    1920
+   ],
+   "audio": true,
+   "tamanho_mb": 1.13
+  }
+ ],
+ "arquivos": {
+  "reel": "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-10-03_AR-0136/reel.mp4",
+  "capa": "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-10-03_AR-0136/capa.jpg",
+  "stories": [
+   "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-10-03_AR-0136/story1.mp4",
+   "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-10-03_AR-0136/story2.mp4",
+   "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-10-03_AR-0136/story3.mp4",
+   "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-10-03_AR-0136/story4.mp4"
+  ],
+  "legenda": "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-10-03_AR-0136/legenda.txt"
+ },
+ "problemas": [],
+ "avisos": [],
+ "aprovado_qc": true
+}

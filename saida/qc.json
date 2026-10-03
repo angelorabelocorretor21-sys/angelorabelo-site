@@ -1,0 +1,86 @@
+{
+ "data": "2026-10-03",
+ "codigo": "AR-0138",
+ "codigo_rjweb": "1602",
+ "titulo": "Casa em condomínio, Gravatá-PE",
+ "tipo": "Casa em condomínio",
+ "categoria": "urbano",
+ "cidade": "Gravatá",
+ "preco": "R$ 550.000",
+ "formato": "TOUR",
+ "gancho": "Esse pode ser o seu novo lar",
+ "musica": "mixkit-1009.mp3",
+ "fotos_usadas": [
+  0,
+  1,
+  2,
+  3,
+  5,
+  10,
+  12,
+  13,
+  14,
+  15
+ ],
+ "reel": {
+  "duracao": 31.0,
+  "resolucao": [
+   1080,
+   1920
+  ],
+  "audio": true,
+  "tamanho_mb": 14.54
+ },
+ "stories": [
+  {
+   "duracao": 5.0,
+   "resolucao": [
+    1080,
+    1920
+   ],
+   "audio": true,
+   "tamanho_mb": 2.21
+  },
+  {
+   "duracao": 5.0,
+   "resolucao": [
+    1080,
+    1920
+   ],
+   "audio": true,
+   "tamanho_mb": 2.72
+  },
+  {
+   "duracao": 5.0,
+   "resolucao": [
+    1080,
+    1920
+   ],
+   "audio": true,
+   "tamanho_mb": 2.17
+  },
+  {
+   "duracao": 5.0,
+   "resolucao": [
+    1080,
+    1920
+   ],
+   "audio": true,
+   "tamanho_mb": 1.14
+  }
+ ],
+ "arquivos": {
+  "reel": "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-10-03_AR-0138/reel.mp4",
+  "capa": "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-10-03_AR-0138/capa.jpg",
+  "stories": [
+   "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-10-03_AR-0138/story1.mp4",
+   "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-10-03_AR-0138/story2.mp4",
+   "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-10-03_AR-0138/story3.mp4",
+   "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-10-03_AR-0138/story4.mp4"
+  ],
+  "legenda": "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-10-03_AR-0138/legenda.txt"
+ },
+ "problemas": [],
+ "avisos": [],
+ "aprovado_qc": true
+}

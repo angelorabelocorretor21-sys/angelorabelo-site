@@ -222,12 +222,13 @@ def dhash(im, n=8):
 def nota_foto(path):
     im = Image.open(path).convert("RGB")
     w, h = im.size
+    faixa = tem_rodape(im)
     t = im.copy(); t.thumbnail((500, 500))
     g = t.convert("L")
     nit = ImageStat.Stat(g.filter(ImageFilter.FIND_EDGES)).var[0]  # nitidez
     lum = ImageStat.Stat(g).mean[0]
     nota = min(nit / 2500, 1.0) * 55 + min(min(w, h) / 1000, 1.0) * 30 + (15 if 70 < lum < 200 else 5)
-    return {"arquivo": path, "w": w, "h": h, "nitidez": round(nit), "luz": round(lum), "nota": round(nota, 1), "hash": dhash(t)}
+    return {"arquivo": path, "w": w, "h": h, "nitidez": round(nit), "luz": round(lum), "nota": round(nota, 1), "hash": dhash(t), "faixa": faixa}
 
 
 def preparar_fotos(im, maximo=30):
@@ -262,9 +263,19 @@ def contato(fotos, destino):
         t = ImageOps.fit(Image.open(r["arquivo"]).convert("RGB"), (tw - 6, th - 6))
         x, y = (k % cols) * tw, (k // cols) * (th + 34)
         folha.paste(t, (x + 3, y + 3))
-        marca = f"#{r['indice']}  nota {r['nota']}" + ("  DUP" if r["duplicada"] else "") + ("  PEQ" if r["pequena"] else "")
+        marca = f"#{r['indice']}  nota {r['nota']}" + ("  DUP" if r["duplicada"] else "") + ("  PEQ" if r["pequena"] else "") + ("  FAIXA" if r.get("faixa") else "")
         d.text((x + 6, y + th + 2), marca, font=f, fill=(255, 220, 120) if not (r["duplicada"] or r["pequena"]) else (255, 110, 110))
     folha.save(destino, "JPEG", quality=85)
+
+
+MIN_LIMPAS = 6  # com pelo menos isso de fotos sem a faixa verde antiga, as com faixa são puladas
+
+
+def so_limpas(boas, minimo=MIN_LIMPAS):
+    """Pula as fotos com a faixa verde antiga quando sobram fotos limpas suficientes.
+    Se não sobrarem (imóvel só com fotos antigas), usa todas — abrir_foto() corta a faixa e a equipe."""
+    limpas = [r for r in boas if not r.get("faixa")]
+    return limpas if len(limpas) >= minimo else boas
 
 
 def escolher_fotos(fotos, n, ordem=None):
@@ -272,7 +283,7 @@ def escolher_fotos(fotos, n, ordem=None):
     if ordem:
         esc = [por_ind[i] for i in ordem if i in por_ind]
     else:
-        boas = [r for r in fotos if not r["duplicada"] and not r["pequena"]]
+        boas = so_limpas([r for r in fotos if not r["duplicada"] and not r["pequena"]])
         if len(boas) < 3:
             boas = [r for r in fotos if not r["duplicada"]] or fotos
         capa = boas[0]
@@ -283,31 +294,55 @@ def escolher_fotos(fotos, n, ordem=None):
 
 
 # ---------------------------------------------------------------- rodapé antigo das fotos do RJWEB
-def tem_rodape(im):
-    """Fotos antigas do RJWEB trazem faixa verde com telefones antigos no rodapé
-    e fotos da equipe no canto inferior direito. Detecta a faixa verde."""
+def faixa_verde(im):
+    """Fotos antigas do RJWEB trazem faixa verde com telefones antigos no rodapé e fotos da
+    equipe no canto inferior direito. Varre linha a linha os últimos 12% da foto (a faixa tem
+    ~3% da altura nas fotos em pé e ~6% nas horizontais) e devolve a fração da altura onde a
+    faixa começa, ou None se não houver faixa."""
     w, h = im.size
-    verdes = tot = 0
-    for fy in (0.965, 0.975, 0.985):
-        for fx in (0.05, 0.15, 0.25, 0.35, 0.45, 0.55, 0.65):
-            r, g, b = im.getpixel((int(w * fx), int(h * fy)))[:3]
-            tot += 1
-            if g > r + 50 and g > b + 35:
+    passo_y = max(1, h // 300)
+    xs = [int(w * (0.02 + 0.63 * k / 39)) for k in range(40)]  # só até 65%: à direita fica a equipe
+    ys = list(range(int(h * 0.88), h, passo_y))
+    marcas = []
+    for y in ys:
+        verdes = 0
+        for x in xs:
+            r, g, b = im.getpixel((x, y))[:3]
+            # verde da faixa ≈ (33, 178, 90): verde-azulado. Grama tem azul quase zero (b < r).
+            if g > r + 50 and g > b + 35 and b > r + 10:
                 verdes += 1
-    return verdes >= tot * 0.6
+        marcas.append(verdes >= 0.45 * len(xs))  # o texto branco dos telefones tira parte dos pontos
+    if sum(marcas) < 2 or not any(marcas[-3:]):
+        return None  # a faixa vai até a borda de baixo
+    k = marcas.index(True)
+    if sum(marcas[k:]) < 0.7 * len(marcas[k:]):
+        return None  # a faixa é contínua até o fim
+    return ys[k] / h
+
+
+def tem_rodape(im):
+    return faixa_verde(im) is not None
+
+
+# Posição das fotos da equipe nas fotos antigas (medido em out/2026): começam em ~71% da largura;
+# na altura, em ~79% (horizontais) e ~87% (em pé). Margens abaixo têm folga.
+EQUIPE_X = 0.66
+EQUIPE_Y_EM_PE = 0.83
 
 
 def abrir_foto(path):
     """Abre a foto já sem o rodapé antigo. Retorna (imagem, limite_direito) — limite_direito é a
     fração da largura que o quadro pode mostrar sem pegar as fotos da equipe (1.0 = sem limite)."""
     im = Image.open(path).convert("RGB")
-    if not tem_rodape(im):
+    topo = faixa_verde(im)
+    if topo is None:
         return im, 1.0
     w, h = im.size
     if w / h > 1.15:
-        return im.crop((0, 0, w, int(h * 0.94))), 0.76
+        # horizontal: tira a faixa e trava o quadro à esquerda das fotos da equipe
+        return im.crop((0, 0, w, int(h * min(topo, 0.95)) - 2)), EQUIPE_X
     # foto em pé: o quadro vertical mostra a largura toda — corta acima das fotos da equipe
-    return im.crop((0, 0, w, int(h * 0.76))), 1.0
+    return im.crop((0, 0, w, int(h * EQUIPE_Y_EM_PE))), 1.0
 
 
 # ---------------------------------------------------------------- texto/arte
@@ -536,8 +571,12 @@ def cena(foto, dur, mov, sobre, destino, tmp):
         c = max(W / bw, H / bh)
         z0, z1 = (1.02, 1.15) if mov != "zoom_out" else (1.15, 1.02)
         kw = bw * c
+        # corte centralizado, mas nunca à direita de `lim` (fotos da equipe nas fotos antigas)
+        # (a largura de cada quadro é calculada pelo tempo — o crop não acompanha o iw do scale por quadro)
+        sw = f"({kw:.2f}*({z0}+({z1 - z0:.3f})*t/{D}))"
+        cx = "(iw-ow)/2" if lim >= 1.0 else f"max(0,min(({sw}-{W})/2,{sw}*{lim:.3f}-{W}-4))"
         vf = (f"scale=w='trunc({kw:.2f}*({z0}+({z1 - z0:.3f})*t/{D})/2)*2':h=-2:eval=frame:flags=bicubic,"
-              f"crop={W}:{H}")
+              f"crop={W}:{H}:x='{cx}'")
     vf = vf + ",setsar=1,format=yuv420p"
     args = ["-loop", "1", "-framerate", str(FPS), "-t", f"{dur:.3f}", "-i", base]
     if sobre:
@@ -668,6 +707,10 @@ def cmd_gerar(caminho_roteiro):
     esc = escolher_fotos(fotos, n_fotos, R.get("fotos"))
     if len(esc) < 4:
         problemas.append(f"Só {len(esc)} fotos utilizáveis (mínimo 4).")
+    com_faixa = [r["indice"] for r in esc if r.get("faixa", tem_rodape(Image.open(r["arquivo"]).convert("RGB")))]
+    if com_faixa:
+        avisos.append(f"Imóvel só com fotos antigas: {len(com_faixa)} foto(s) com faixa verde usadas JÁ CORTADAS "
+                      f"(faixa e equipe removidas automaticamente): {com_faixa}")
 
     preco = preco_txt(im)
     mostrar_preco = bool(R.get("mostrar_preco", True)) and bool(preco)
@@ -721,8 +764,10 @@ def cmd_gerar(caminho_roteiro):
     juntar(partes, durs, reel, musica, semente)
     info_reel = sonda(reel)
     # capa = 1ª cena com o gancho
-    capa = abrir_foto(esc[0]["arquivo"])[0]
-    capa = ImageOps.fit(capa, (W, H)).convert("RGBA")
+    capa, lim_c = abrir_foto(esc[0]["arquivo"])
+    fr = min(1.0, (W / H) / (capa.width / capa.height))  # fração da largura que cabe no quadro
+    cx = 0.5 if fr >= 1.0 or 0.5 + fr / 2 <= lim_c else max(0.0, (lim_c - fr) / (1 - fr))
+    capa = ImageOps.fit(capa, (W, H), centering=(cx, 0.5)).convert("RGBA")
     capa.alpha_composite(Image.open(os.path.join(tmp, "ov0.png")))
     capa.convert("RGB").save(os.path.join(out, "capa.jpg"), "JPEG", quality=92)
 

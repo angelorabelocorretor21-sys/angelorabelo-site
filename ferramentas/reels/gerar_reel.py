@@ -219,7 +219,97 @@ def dhash(im, n=8):
     return sum(1 << i for i in range(n * n) if px[(i // n) * (n + 1) + i % n] > px[(i // n) * (n + 1) + i % n + 1])
 
 
+def colorido(t):
+    """Colorfulness (Hasler & Süsstrunk) — fotos vivas/abertas pontuam mais que fotos cinzentas."""
+    px = list(t.convert("RGB").resize((96, 96)).getdata())
+    rg = [r - g for r, g, b in px]; yb = [0.5 * (r + g) - b for r, g, b in px]
+    def ms(v):
+        m = sum(v) / len(v)
+        return m, (sum((x - m) ** 2 for x in v) / len(v)) ** 0.5
+    mrg, srg = ms(rg); myb, syb = ms(yb)
+    return (srg ** 2 + syb ** 2) ** 0.5 + 0.3 * (mrg ** 2 + myb ** 2) ** 0.5
+
+
+def ceu_aberto(t):
+    """Fração do terço de cima com céu (azul ou branco-claro) — indica foto externa/aberta."""
+    p = t.convert("RGB").resize((60, 60))
+    n = ok = 0
+    for y in range(20):
+        for x in range(60):
+            r, g, b = p.getpixel((x, y)); n += 1
+            if (b > r + 15 and b > 110) or (r > 200 and g > 200 and b > 200):
+                ok += 1
+    return ok / n
+
+
+def baguncado(t):
+    """Densidade de bordas finas espalhadas pela foto inteira (objetos amontoados, entulho, close de
+    coisas). Fotos limpas e abertas têm áreas lisas (parede, céu, piso, gramado)."""
+    g = t.convert("L").resize((160, 160)).filter(ImageFilter.FIND_EDGES)
+    px = list(g.getdata())
+    fortes = sum(1 for v in px if v > 40) / len(px)
+    # quantos blocos 4x4 são "lisos" (pouca borda): foto arrumada tem vários
+    lisos = 0
+    for by in range(4):
+        for bx in range(4):
+            bloco = [px[(by * 40 + yy) * 160 + bx * 40 + xx] for yy in range(0, 40, 2) for xx in range(0, 40, 2)]
+            if sum(1 for v in bloco if v > 40) / len(bloco) < 0.10:
+                lisos += 1
+    return fortes, lisos
+
+
+IA = None  # avaliador semântico opcional (CLIP); carregado só se a biblioteca existir
+
+
+def _ia():
+    global IA
+    if IA is not None:
+        return IA or None
+    IA = False
+    if os.environ.get("REELS_SEM_IA"):
+        return None
+    try:
+        import torch, open_clip  # noqa: F401
+        m, _, prep = open_clip.create_model_and_transforms("ViT-B-32", pretrained="laion2b_s34b_b79k")
+        tok = open_clip.get_tokenizer("ViT-B-32")
+        bons = ["a wide-angle real estate photo of a beautiful house exterior", "a bright, tidy and spacious living room",
+                "an aerial view of a farm with green pasture", "a swimming pool in a beautiful property",
+                "a wide view of a countryside property with trees and sky", "a clean modern kitchen, real estate photo",
+                "a cozy tidy bedroom, real estate photo", "a beautiful facade of a building in good condition",
+                "a well-kept garden with a house", "a panoramic landscape view from a property"]
+        ruins = ["a messy cluttered room full of objects", "a close-up photo of an object", "a pile of junk and debris",
+                 "a dirty abandoned room", "a dark blurry photo", "a photo of a document or a sign", "a close-up of a wall",
+                 "construction material and rubble", "a bathroom toilet close-up", "a photo of a person"]
+        with torch.no_grad():
+            tb = m.encode_text(tok(bons)); tr = m.encode_text(tok(ruins))
+            tb /= tb.norm(dim=-1, keepdim=True); tr /= tr.norm(dim=-1, keepdim=True)
+        IA = (m.eval(), prep, tb, tr, torch)
+    except Exception as e:  # sem IA, fica só a nota por regras de imagem
+        print("  avaliador de IA indisponível:", str(e)[:120], file=sys.stderr)
+        IA = False
+    return IA or None
+
+
+def nota_ia(im):
+    """0..100: quanto a foto parece 'foto boa de imóvel, aberta e arrumada' x 'bagunça/close/escura'."""
+    ia = _ia()
+    if not ia:
+        return None
+    m, prep, tb, tr, torch = ia
+    try:
+        with torch.no_grad():
+            e = m.encode_image(prep(im).unsqueeze(0)); e /= e.norm(dim=-1, keepdim=True)
+            lb = (e @ tb.T).max().item(); lr = (e @ tr.T).max().item()
+        return max(0.0, min(100.0, 50 + (lb - lr) * 900))
+    except Exception as e:
+        print("  IA falhou nesta foto:", str(e)[:80], file=sys.stderr)
+        return None
+
+
 def nota_foto(path):
+    """Nota 0..100 de 'foto boa para Reel': nítida, clara, colorida, ABERTA (mostra o imóvel) e
+    arrumada. Desde 09/10/2026 (pedido do Angelo): evitar fotos de coisas desarrumadas, closes e
+    fotos sem visibilidade do imóvel; preferir fotos abertas, claras e objetivas."""
     im = Image.open(path).convert("RGB")
     w, h = im.size
     faixa = tem_rodape(im)
@@ -227,8 +317,26 @@ def nota_foto(path):
     g = t.convert("L")
     nit = ImageStat.Stat(g.filter(ImageFilter.FIND_EDGES)).var[0]  # nitidez
     lum = ImageStat.Stat(g).mean[0]
-    nota = min(nit / 2500, 1.0) * 55 + min(min(w, h) / 1000, 1.0) * 30 + (15 if 70 < lum < 200 else 5)
-    return {"arquivo": path, "w": w, "h": h, "nitidez": round(nit), "luz": round(lum), "nota": round(nota, 1), "hash": dhash(t), "faixa": faixa}
+    cor = colorido(t)
+    ceu = ceu_aberto(t)
+    fortes, lisos = baguncado(t)
+    tecnica = min(nit / 2500, 1.0) * 30 + min(min(w, h) / 1000, 1.0) * 15
+    luz = 15 if 85 < lum < 190 else (8 if 60 < lum < 215 else 0)
+    vida = min(cor / 60, 1.0) * 12
+    aberta = (8 if w / h > 1.15 else 3) + min(ceu / 0.35, 1.0) * 10   # horizontal + céu = vista aberta
+    ordem = 10 if (lisos >= 4 and fortes < 0.30) else (5 if lisos >= 2 else 0)  # áreas limpas
+    if fortes > 0.42 and lisos <= 1:
+        ordem -= 12  # muita coisa amontoada
+    nota = tecnica + luz + vida + aberta + ordem
+    ia = nota_ia(t)
+    if ia is not None:
+        nota = 0.45 * nota + 0.55 * ia
+    return {"arquivo": path, "w": w, "h": h, "nitidez": round(nit), "luz": round(lum), "cor": round(cor), "ceu": round(ceu, 2),
+            "bagunca": round(fortes, 2), "lisos": lisos, "ia": None if ia is None else round(ia, 1),
+            "externa": ceu > 0.18, "nota": round(nota, 1), "hash": dhash(t), "faixa": faixa}
+
+
+NOTA_MIN = 38  # abaixo disso a foto só entra se faltar foto (nunca na capa)
 
 
 def preparar_fotos(im, maximo=30):
@@ -278,18 +386,30 @@ def so_limpas(boas, minimo=MIN_LIMPAS):
     return limpas if len(limpas) >= minimo else boas
 
 
+def selecionar(fotos, n):
+    """Escolhe as n melhores fotos para o Reel (09/10/2026): descarta duplicadas, pequenas e as de
+    nota baixa (bagunça, close, escura) enquanto houver fotos boas; capa = a melhor foto EXTERNA/aberta
+    (fachada, vista, área de lazer); depois as melhores por nota, em ordem de passeio:
+    externas primeiro, depois ambientes internos (na ordem do cadastro)."""
+    boas = so_limpas([r for r in fotos if not r["duplicada"] and not r["pequena"]])
+    if len(boas) < 3:
+        boas = [r for r in fotos if not r["duplicada"]] or fotos
+    boas_ok = [r for r in boas if r["nota"] >= NOTA_MIN]
+    if len(boas_ok) >= min(n, 7):
+        boas = boas_ok
+    externas = [r for r in boas if r.get("externa")]
+    capa = max(externas or boas[:6] or boas, key=lambda r: r["nota"])
+    resto = sorted([r for r in boas if r is not capa], key=lambda r: -r["nota"])[: n - 1]
+    resto.sort(key=lambda r: (not r.get("externa"), r["indice"]))
+    return [capa] + resto
+
+
 def escolher_fotos(fotos, n, ordem=None):
     por_ind = {r["indice"]: r for r in fotos}
     if ordem:
         esc = [por_ind[i] for i in ordem if i in por_ind]
     else:
-        boas = so_limpas([r for r in fotos if not r["duplicada"] and not r["pequena"]])
-        if len(boas) < 3:
-            boas = [r for r in fotos if not r["duplicada"]] or fotos
-        capa = boas[0]
-        resto = sorted(boas[1:], key=lambda r: -r["nota"])[: n - 1]
-        resto.sort(key=lambda r: r["indice"])  # mantém a ordem do cadastro (fachada → ambientes)
-        esc = [capa] + resto
+        esc = selecionar(fotos, n)
     return esc[:n]
 
 
@@ -457,9 +577,31 @@ def overlay(tipo, dados, im, destino):
     elif tipo == "destaque":
         gradiente(img, base=720)
         d = ImageDraw.Draw(img)
+        if dados.get("num"):  # formato LISTA: contador grande ("01", "02"...)
+            fn = fonte(F_SERIF, 150, "Bold")
+            d.text((66, H - 760), f"{dados['num']:02d}", font=fn, fill=DOURADO_CLARO + (235,))
         d.rectangle((72, H - 560, 72 + 90, H - 554), fill=DOURADO)
         f, ls = texto_ajustado(d, dados["texto"], F_SERIF, "Bold", 92, 60, L, 3)
         escreve(d, (72, H - 525), ls, f, (251, 245, 234), gap=1.0)
+    elif tipo == "ficha":
+        # cartão com TODAS as características confirmadas no cadastro (mais informação no vídeo)
+        itens = dados["itens"][:6]
+        fh_t = fonte(F_SANS, 34, "SemiBold")
+        fi = fonte(F_SANS, 50, "Medium")
+        alto = 150 + 86 * len(itens) + 40
+        y0 = H - 420 - alto
+        painel = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+        ImageDraw.Draw(painel).rounded_rectangle((56, y0, W - 56, y0 + alto), radius=34, fill=ESCURO + (205,), outline=DOURADO + (255,), width=3)
+        img.alpha_composite(painel)
+        d = ImageDraw.Draw(img)
+        d.text((100, y0 + 44), " ".join(dados.get("titulo", "FICHA DO IMÓVEL")), font=fh_t, fill=DOURADO_CLARO)
+        d.rectangle((100, y0 + 106, 190, y0 + 110), fill=DOURADO)
+        y = y0 + 140
+        for t in itens:
+            d.ellipse((104, y + 24, 122, y + 42), fill=DOURADO)
+            ft, lt = texto_ajustado(d, t, F_SANS, "Medium", 50, 36, W - 260, 1)
+            d.text((150, y + 4), lt[0] if lt else t, font=ft, fill=CREME)
+            y += 86
     elif tipo == "desejo":
         gradiente(img, topo=700, base=600)
         d = ImageDraw.Draw(img)
@@ -548,35 +690,72 @@ def ff(args, quiet=True):
         raise RuntimeError("ffmpeg falhou: " + r.stderr[-1500:])
 
 
+def base_aberta(src, lim, destino):
+    """Quadro 'aberto' (09/10/2026): a foto INTEIRA aparece na largura da tela, sobre um fundo
+    desfocado da própria foto — mostra o ambiente todo em vez de um recorte apertado."""
+    w, h = src.size
+    if lim < 1.0:  # fotos antigas: não mostrar a parte com as fotos da equipe
+        src = src.crop((0, 0, int(w * lim), h)); w, h = src.size
+    fundo = ImageOps.fit(src, (W, H)).filter(ImageFilter.GaussianBlur(38))
+    fundo = Image.blend(fundo, Image.new("RGB", (W, H), ESCURO), 0.18)
+    # foto grande: ocupa a largura com uma pequena sobra nas laterais (mostra ~80% da largura da foto
+    # de uma vez e o resto aparece no movimento) e nunca fica menor que metade da altura da tela
+    fw = int(W * 1.25)
+    fh = int(h * fw / w)
+    if fh < H * 0.50:
+        fh = int(H * 0.50); fw = int(w * fh / h)
+    if fh > H * 0.78:  # foto quase quadrada/em pé: limita a altura
+        fh = int(H * 0.78); fw = int(w * fh / h)
+    fg = src.resize((fw, fh), Image.LANCZOS)
+    if fw > W:  # recorte central na largura da tela
+        fg = fg.crop(((fw - W) // 2, 0, (fw - W) // 2 + W, fh)); fw = W
+    y = int((H - fh) * 0.42)
+    sombra = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    ImageDraw.Draw(sombra).rectangle((0, y + 10, W, y + fh + 30), fill=(0, 0, 0, 110))
+    sombra = sombra.filter(ImageFilter.GaussianBlur(18))
+    out = fundo.convert("RGBA"); out.alpha_composite(sombra)
+    out = out.convert("RGB"); out.paste(fg, ((W - fw) // 2, y))
+    out.save(destino, "JPEG", quality=95)
+
+
 def cena(foto, dur, mov, sobre, destino, tmp):
-    """Foto com movimento de câmera (pan/zoom suave) + texto que entra com fade."""
+    """Foto com movimento de câmera suave + texto que entra com fade.
+    mov: zoom_in / zoom_out / pan_esq / pan_dir (tela cheia) ou 'aberta' (foto inteira + fundo desfocado).
+    Desde 09/10/2026 os enquadramentos são mais abertos: menos zoom e o pan percorre a foto toda."""
     src, lim = abrir_foto(foto)
     frames = int(round(dur * FPS))
-    # base maior que o quadro para permitir movimento sem perder nitidez
-    esc = max(W * 1.18 / src.width, H * 1.18 / src.height)
-    horizontal = src.width / src.height > 1.15
-    if horizontal and mov in ("pan_esq", "pan_dir"):
-        esc = max(H * 1.06 / src.height, W / src.width)
-    bw, bh = int(src.width * esc) // 2 * 2, int(src.height * esc) // 2 * 2
-    base = os.path.join(tmp, os.path.basename(destino) + "_base.jpg")
-    src.resize((bw, bh), Image.LANCZOS).save(base, "JPEG", quality=95)
     D = max(dur, 0.1)
-    xmax = min(bw - W, int(bw * lim) - W)
-    xmin = int((bw - W) * 0.08)
-    if mov in ("pan_esq", "pan_dir") and xmax - xmin >= 80:
-        x0, x1 = (xmax, xmin) if mov == "pan_esq" else (xmin, xmax)
-        vf = f"crop={W}:{H}:x='{x0}+({x1 - x0})*t/{D}':y='({bh}-{H})/2'"
+    horizontal = src.width / src.height > 1.15
+    if mov == "aberta" and not horizontal:
+        mov = "zoom_out"
+    if mov == "aberta":
+        base = os.path.join(tmp, os.path.basename(destino) + "_aberta.jpg")
+        base_aberta(src, lim, base)
+        z0, z1 = 1.0, 1.06
+        vf = (f"scale=w='trunc({W}*({z0}+({z1 - z0:.3f})*t/{D})/2)*2':h=-2:eval=frame:flags=bicubic,"
+              f"crop={W}:{H}:x='(iw-ow)/2':y='(ih-oh)/2'")
     else:
-        # zoom suave: a base é redimensionada quadro a quadro e cortada no centro
-        c = max(W / bw, H / bh)
-        z0, z1 = (1.02, 1.15) if mov != "zoom_out" else (1.15, 1.02)
-        kw = bw * c
-        # corte centralizado, mas nunca à direita de `lim` (fotos da equipe nas fotos antigas)
-        # (a largura de cada quadro é calculada pelo tempo — o crop não acompanha o iw do scale por quadro)
-        sw = f"({kw:.2f}*({z0}+({z1 - z0:.3f})*t/{D}))"
-        cx = "(iw-ow)/2" if lim >= 1.0 else f"max(0,min(({sw}-{W})/2,{sw}*{lim:.3f}-{W}-4))"
-        vf = (f"scale=w='trunc({kw:.2f}*({z0}+({z1 - z0:.3f})*t/{D})/2)*2':h=-2:eval=frame:flags=bicubic,"
-              f"crop={W}:{H}:x='{cx}'")
+        # base um pouco maior que o quadro (antes 18%; agora 6%) para mostrar mais do imóvel
+        esc = max(W * 1.06 / src.width, H * 1.06 / src.height)
+        if horizontal and mov in ("pan_esq", "pan_dir"):
+            esc = max(H * 1.0 / src.height, W / src.width)
+        bw, bh = int(src.width * esc) // 2 * 2, int(src.height * esc) // 2 * 2
+        base = os.path.join(tmp, os.path.basename(destino) + "_base.jpg")
+        src.resize((bw, bh), Image.LANCZOS).save(base, "JPEG", quality=95)
+        xmax = min(bw - W, int(bw * lim) - W)
+        xmin = 0
+        if mov in ("pan_esq", "pan_dir") and xmax - xmin >= 80:
+            x0, x1 = (xmax, xmin) if mov == "pan_esq" else (xmin, xmax)
+            vf = f"crop={W}:{H}:x='{x0}+({x1 - x0})*t/{D}':y='({bh}-{H})/2'"
+        else:
+            # zoom suave (1,00 → 1,08): a base é redimensionada quadro a quadro e cortada no centro
+            c = max(W / bw, H / bh)
+            z0, z1 = (1.0, 1.08) if mov != "zoom_out" else (1.08, 1.0)
+            kw = bw * c
+            sw = f"({kw:.2f}*({z0}+({z1 - z0:.3f})*t/{D}))"
+            cx = "(iw-ow)/2" if lim >= 1.0 else f"max(0,min(({sw}-{W})/2,{sw}*{lim:.3f}-{W}-4))"
+            vf = (f"scale=w='trunc({kw:.2f}*({z0}+({z1 - z0:.3f})*t/{D})/2)*2':h=-2:eval=frame:flags=bicubic,"
+                  f"crop={W}:{H}:x='{cx}'")
     vf = vf + ",setsar=1,format=yuv420p"
     args = ["-loop", "1", "-framerate", str(FPS), "-t", f"{dur:.3f}", "-i", base]
     if sobre:
@@ -596,7 +775,8 @@ def cena_estatica(imagem, dur, destino):
         "-frames:v", str(frames), "-c:v", "libx264", "-preset", "medium", "-crf", "18", "-pix_fmt", "yuv420p", destino])
 
 
-TRANS = ["fade", "smoothleft", "fadeblack", "slideup", "circleopen", "smoothup", "fade", "wiperight"]
+TRANS = ["fade", "smoothleft", "fadeblack", "slideup", "circleopen", "smoothup", "dissolve", "wiperight",
+         "smoothright", "zoomin", "radial", "slideleft", "hlslice", "fadewhite"]
 
 
 def juntar(partes, duracoes, destino, musica=None, semente=0):
@@ -624,7 +804,7 @@ def juntar(partes, duracoes, destino, musica=None, semente=0):
         com = destino + ".audio.mp4"
         ini = 0
         ff(["-i", destino, "-ss", str(ini), "-i", musica, "-filter_complex",
-            f"[1:a]atrim=0:{total:.3f},asetpts=PTS-STARTPTS,afade=t=in:st=0:d=0.8,afade=t=out:st={max(total-1.8,0):.3f}:d=1.8,volume=0.85[a]",
+            f"[1:a]atrim=0:{total:.3f},asetpts=PTS-STARTPTS,apad=whole_dur={total:.3f},afade=t=in:st=0:d=1.2,afade=t=out:st={max(total-1.8,0):.3f}:d=1.8,volume=0.70[a]",
             "-map", "0:v", "-map", "[a]", "-c:v", "copy", "-c:a", "aac", "-b:a", "192k", "-ar", "44100",
             "-movflags", "+faststart", "-shortest", com])
         shutil.move(com, destino)
@@ -647,12 +827,22 @@ def sonda(path):
     return {"duracao": round(dur, 2), "resolucao": res, "audio": "Audio:" in txt, "tamanho_mb": round(os.path.getsize(path) / 1e6, 2)}
 
 
-def escolher_musica(pedida, semente):
+def estilo_musical(im):
+    """09/10/2026 (pedido do Angelo): música com a pegada do imóvel — rural = country/sertanejo
+    (violão, folk, country suave); urbano/terreno/comercial = moderna e urbana (lo-fi, chill, house suave)."""
+    return "rural" if categoria(im) == "rural" else "urbano"
+
+
+def escolher_musica(pedida, semente, estilo=None):
     if pedida:
         p = os.path.join(MUSICAS, pedida)
         if os.path.exists(p):
             return p
-    fs = sorted(glob.glob(os.path.join(MUSICAS, "*.mp3")) + glob.glob(os.path.join(MUSICAS, "*.m4a")))
+    def lista(pasta):
+        return sorted(glob.glob(os.path.join(pasta, "*.mp3")) + glob.glob(os.path.join(pasta, "*.m4a")))
+    fs = lista(os.path.join(MUSICAS, estilo)) if estilo else []
+    if not fs:
+        fs = lista(MUSICAS)
     if not fs:
         return None
     return fs[semente % len(fs)]
@@ -723,7 +913,9 @@ def cmd_gerar(caminho_roteiro):
         problemas.append("Roteiro sem gancho.")
 
     # ---------- Reel
-    movs = ["zoom_in", "pan_dir", "zoom_out", "pan_esq"]
+    # 09/10/2026: enquadramentos mais abertos e estrutura que muda conforme o formato do dia
+    movs = ["zoom_in", "aberta", "pan_dir", "aberta", "zoom_out", "pan_esq", "aberta"]
+    formato = (R.get("formato") or "").upper()
     partes, durs = [], []
     k = 0
     def add(foto, dur, tipo, dados, idx):
@@ -732,32 +924,46 @@ def cmd_gerar(caminho_roteiro):
         if tipo:
             sob = os.path.join(tmp, f"ov{k}.png"); overlay(tipo, dados, im, sob)
         dst = os.path.join(tmp, f"c{k:02d}.mp4")
-        cena(foto["arquivo"], dur, movs[idx % 4], sob, dst, tmp)
+        cena(foto["arquivo"], dur, movs[idx % len(movs)], sob, dst, tmp)
         partes.append(dst); durs.append(dur); k += 1
 
     fila = list(esc)
-    add(fila.pop(0), 3.3, "gancho", {"texto": limpa(R["gancho"]), "sub": limpa(R.get("gancho_sub", ""))}, 0)
+    fch = fichas(im)
+    tipo_txt = limpa(im.get("tipo") or "")
+    itens_ficha = ([tipo_txt] if tipo_txt else []) + fch + [local_txt(im)]
+    rotulo = "Valor de venda" if im.get("venda") else "Valor"
+    preco_cedo = mostrar_preco and formato in ("PRECO", "OPORTUNIDADE", "INVESTIMENTO")
+    corte = 2.0 if formato == "TOUR" else 2.4
+    add(fila.pop(0), 3.2, "gancho", {"texto": limpa(R["gancho"]), "sub": limpa(R.get("gancho_sub", ""))}, 0)
+    i = 1
+    if preco_cedo and fila:  # o preço logo no começo prende quem procura oportunidade
+        add(fila.pop(0), 3.0, "preco", {"preco": preco, "rotulo": rotulo}, i); i += 1
     if fila:
-        add(fila.pop(0), 4.2, "apresentacao", {"titulo": limpa(im.get("titulo") or im.get("tipo")), "local": local_txt(im), "fichas": fichas(im)[:4]}, 1)
-    reservas_fim = 2 if mostrar_preco else 1
-    i = 2
+        add(fila.pop(0), 4.0, "apresentacao", {"titulo": limpa(im.get("titulo") or im.get("tipo")), "local": local_txt(im), "fichas": fch[:4]}, i); i += 1
+    if formato == "ESTILO_DE_VIDA" and fila:
+        add(fila.pop(0), 3.4, "desejo", {"texto": limpa(R.get("desejo") or "Imagine você aqui")}, i); i += 1
+    if len(itens_ficha) >= 3 and fila:
+        add(fila.pop(0), 4.4, "ficha", {"titulo": "FICHA DO IMÓVEL", "itens": itens_ficha}, i); i += 1
+    reservas_fim = (0 if formato == "ESTILO_DE_VIDA" else 1) + (1 if mostrar_preco and not preco_cedo else 0)
+    n = 0
     for t in destaques:
-        if len(fila) <= reservas_fim:
+        if len(fila) <= reservas_fim or sum(durs) > 27:
             break
-        add(fila.pop(0), 3.0, "destaque", {"texto": t}, i); i += 1
-    while len(fila) > reservas_fim and sum(durs) < 22:
-        add(fila.pop(0), 2.4, None, None, i); i += 1
-    if fila:
-        add(fila.pop(0), 3.6, "desejo", {"texto": limpa(R.get("desejo") or "Imagine você aqui")}, i); i += 1
-    if mostrar_preco and fila:
-        add(fila.pop(0) if not R.get("foto_preco") else next((r for r in esc if r["indice"] == R["foto_preco"]), fila.pop(0)), 3.4, "preco", {"preco": preco, "rotulo": "Valor de venda" if im.get("venda") else "Valor"}, i); i += 1
+        n += 1
+        add(fila.pop(0), 3.0, "destaque", {"texto": t, "num": n if formato == "LISTA" else None}, i); i += 1
+    while len(fila) > reservas_fim and sum(durs) < 25:
+        add(fila.pop(0), corte, None, None, i); i += 1
+    if formato != "ESTILO_DE_VIDA" and fila:
+        add(fila.pop(0), 3.4, "desejo", {"texto": limpa(R.get("desejo") or "Imagine você aqui")}, i); i += 1
+    if mostrar_preco and not preco_cedo and fila:
+        add(fila.pop(0) if not R.get("foto_preco") else next((r for r in esc if r["indice"] == R["foto_preco"]), fila.pop(0)), 3.4, "preco", {"preco": preco, "rotulo": rotulo}, i); i += 1
     fim = os.path.join(tmp, "final.jpg")
     cartao_final(im, limpa(R.get("cta") or "Agende sua visita"), fim)
     dfim = os.path.join(tmp, "cfinal.mp4")
     cena_estatica(fim, 4.2, dfim)
     partes.append(dfim); durs.append(4.2)
 
-    musica = escolher_musica(R.get("musica"), semente)
+    musica = escolher_musica(R.get("musica"), semente, estilo_musical(im))
     if not musica:
         avisos.append("Sem música na pasta ~/.rabelo-sync/reels-musicas — vídeo saiu sem trilha.")
     reel = os.path.join(out, "reel.mp4")
@@ -782,7 +988,7 @@ def cmd_gerar(caminho_roteiro):
     stories = []
     for j, (tipo, dados, foto) in enumerate(story_defs, 1):
         sob = os.path.join(tmp, f"st{j}.png"); overlay(tipo, dados, im, sob)
-        sv = os.path.join(tmp, f"s{j}.mp4"); cena(foto["arquivo"], 5.0, movs[j % 4], sob, sv, tmp)
+        sv = os.path.join(tmp, f"s{j}.mp4"); cena(foto["arquivo"], 5.0, ["zoom_in", "aberta", "zoom_out", "aberta"][j % 4], sob, sv, tmp)
         dst = os.path.join(out, f"story{j}.mp4"); juntar([sv], [5.0], dst, musica, semente + j)
         stories.append(dst)
     fim_s = os.path.join(tmp, "final_story.jpg")
@@ -825,7 +1031,8 @@ def cmd_gerar(caminho_roteiro):
     qc = {"data": hoje, "codigo": cod, "codigo_rjweb": im.get("codigo"), "titulo": im.get("titulo"), "tipo": im.get("tipo"),
           "categoria": categoria(im), "cidade": im.get("cidade"), "preco": preco, "formato": R.get("formato"),
           "gancho": limpa(R.get("gancho")), "musica": os.path.basename(musica) if musica else None,
-          "fotos_usadas": [r["indice"] for r in esc], "reel": info_reel, "stories": info_st,
+          "estilo_musical": (os.path.basename(os.path.dirname(musica)) if musica else None),
+          "fotos_usadas": [r["indice"] for r in esc], "notas_fotos": {str(r["indice"]): {"nota": r.get("nota"), "ia": r.get("ia"), "externa": r.get("externa")} for r in esc}, "reel": info_reel, "stories": info_st,
           "arquivos": {"reel": reel, "capa": os.path.join(out, "capa.jpg"), "stories": stories, "legenda": os.path.join(out, "legenda.txt")},
           "problemas": problemas, "avisos": avisos, "aprovado_qc": not problemas}
     json.dump(qc, open(os.path.join(out, "qc.json"), "w"), ensure_ascii=False, indent=1)

@@ -180,7 +180,7 @@ def roteiro(im, hist, fotos_ok):
     linhas += ["", f"💰 {preco}", "", f"{cta}! Salve e envie para quem procura imóvel em {cid}.",
                f"📲 WhatsApp {G.WHATS}", "", f"— Angelo Rabêlo · Corretor CRECI-PE {G.CRECI} · Perito Avaliador"]
     # fotos: capa = melhor nota entre as boas; resto na ordem do cadastro
-    boas = G.so_limpas([r for r in fotos_ok if not r["duplicada"] and not r["pequena"]])
+    boas = [r for r in fotos_ok if not r["duplicada"] and not r["pequena"]]
     capa = max(boas[:6], key=lambda r: r["nota"])  # entre as primeiras (fachada/externa costumam vir antes)
     resto = sorted([r for r in boas if r is not capa], key=lambda r: -r["nota"])[:9]
     resto.sort(key=lambda r: r["indice"])

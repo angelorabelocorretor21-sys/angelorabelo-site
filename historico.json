@@ -1,0 +1,204 @@
+[
+ {
+  "data": "2026-09-25",
+  "codigo": "AR-0060",
+  "formato": "TOUR",
+  "gancho": "Uma casa com 9 quartos em Gravatá",
+  "origem": "manual"
+ },
+ {
+  "data": "2026-09-26",
+  "codigo": "AR-0130",
+  "formato": "LISTA",
+  "gancho": "Uma mansão com 12 suítes em Gravatá",
+  "origem": "manual"
+ },
+ {
+  "data": "2026-09-27",
+  "codigo": "AR-0057",
+  "formato": "CURIOSIDADE",
+  "gancho": "Uma propriedade rural para conhecer",
+  "origem": "auto"
+ },
+ {
+  "data": "2026-09-28",
+  "codigo": "AR-0134",
+  "formato": "LOCALIZACAO",
+  "gancho": "Um lar pensado para a família",
+  "origem": "auto"
+ },
+ {
+  "data": "2026-09-29",
+  "codigo": "AR-0087",
+  "formato": "TOUR",
+  "gancho": "Repare nos detalhes deste imóvel",
+  "origem": "auto"
+ },
+ {
+  "data": "2026-09-30",
+  "codigo": "AR-0139",
+  "formato": "LISTA",
+  "gancho": "Olha o que está à venda em Sairé",
+  "origem": "auto"
+ },
+ {
+  "data": "2026-10-01",
+  "codigo": "AR-0105",
+  "formato": "PRECO",
+  "gancho": "Esse pode ser o seu refúgio no campo",
+  "origem": "auto",
+  "vaga": 1
+ },
+ {
+  "data": "2026-10-01",
+  "codigo": "AR-0001",
+  "formato": "OPORTUNIDADE",
+  "gancho": "Seu negócio merece este espaço",
+  "origem": "auto",
+  "vaga": 2
+ },
+ {
+  "data": "2026-10-02",
+  "codigo": "AR-0017",
+  "formato": "LOCALIZACAO",
+  "gancho": "Seu refúgio no Agreste",
+  "origem": "auto",
+  "vaga": 1
+ },
+ {
+  "data": "2026-10-02",
+  "codigo": "AR-0140",
+  "formato": "LISTA",
+  "gancho": "Quanto você pagaria por este imóvel?",
+  "origem": "auto",
+  "vaga": 2
+ },
+ {
+  "data": "2026-10-03",
+  "codigo": "AR-0138",
+  "formato": "TOUR",
+  "gancho": "Esse pode ser o seu novo lar",
+  "origem": "auto",
+  "vaga": 1
+ },
+ {
+  "data": "2026-10-03",
+  "codigo": "AR-0136",
+  "formato": "OPORTUNIDADE",
+  "gancho": "Este imóvel em Recife chama atenção",
+  "origem": "auto",
+  "vaga": 2
+ },
+ {
+  "data": "2026-10-04",
+  "codigo": "AR-0118",
+  "formato": "CURIOSIDADE",
+  "gancho": "Olha essa propriedade em Gravatá",
+  "origem": "auto",
+  "vaga": 1
+ },
+ {
+  "data": "2026-10-04",
+  "codigo": "AR-0137",
+  "formato": "ESTILO_DE_VIDA",
+  "gancho": "Seu próximo endereço em Gravatá?",
+  "origem": "auto",
+  "vaga": 2
+ },
+ {
+  "data": "2026-10-05",
+  "codigo": "AR-0133",
+  "formato": "PRECO",
+  "gancho": "Conheça este imóvel em Gravatá",
+  "origem": "auto",
+  "vaga": 1
+ },
+ {
+  "data": "2026-10-05",
+  "codigo": "AR-0090",
+  "formato": "LISTA",
+  "gancho": "Já pensou em viver no campo?",
+  "origem": "auto",
+  "vaga": 2
+ },
+ {
+  "data": "2026-10-06",
+  "codigo": "AR-0082",
+  "formato": "LOCALIZACAO",
+  "gancho": "Este imóvel em Gravatá chama atenção",
+  "origem": "auto",
+  "vaga": 1
+ },
+ {
+  "data": "2026-10-06",
+  "codigo": "AR-0047",
+  "formato": "CURIOSIDADE",
+  "gancho": "Imagine acordar com essa vista do campo",
+  "origem": "auto",
+  "vaga": 2
+ },
+ {
+  "data": "2026-10-07",
+  "codigo": "AR-0132",
+  "formato": "TOUR",
+  "gancho": "Você moraria em um lugar assim?",
+  "origem": "auto",
+  "vaga": 1
+ },
+ {
+  "data": "2026-10-07",
+  "codigo": "AR-0123",
+  "formato": "OPORTUNIDADE",
+  "gancho": "Repare nos detalhes deste imóvel",
+  "origem": "auto",
+  "vaga": 2
+ },
+ {
+  "data": "2026-10-08",
+  "codigo": "AR-0142",
+  "formato": "LISTA",
+  "gancho": "Paz e espaço em Gravatá",
+  "origem": "auto",
+  "vaga": 1
+ },
+ {
+  "data": "2026-10-08",
+  "codigo": "AR-0049",
+  "formato": "ESTILO_DE_VIDA",
+  "gancho": "Paz e espaço em Amaraji",
+  "origem": "auto",
+  "vaga": 2
+ },
+ {
+  "data": "2026-10-09",
+  "codigo": "AR-0054",
+  "formato": "PRECO",
+  "gancho": "O sonho de ter terra em Gravatá",
+  "origem": "auto",
+  "vaga": 1
+ },
+ {
+  "data": "2026-10-09",
+  "codigo": "AR-0125",
+  "formato": "CURIOSIDADE",
+  "gancho": "Imagine chegar em casa e ver isso",
+  "origem": "auto",
+  "vaga": 2
+ },
+ {
+  "data": "2026-10-10",
+  "codigo": "AR-0147",
+  "formato": "INVESTIMENTO",
+  "gancho": "Onde você construiria sua casa?",
+  "origem": "auto",
+  "vaga": 1
+ },
+ {
+  "data": "2026-10-10",
+  "codigo": "AR-0145",
+  "formato": "ESTILO_DE_VIDA",
+  "gancho": "Tour rápido por este imóvel em Sairé",
+  "origem": "auto",
+  "vaga": 2
+ }
+]

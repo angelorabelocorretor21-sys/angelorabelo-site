@@ -1,0 +1,141 @@
+{
+ "data": "2026-10-10",
+ "codigo": "AR-0147",
+ "codigo_rjweb": "1606",
+ "titulo": "Casa em condomínio em Loteamento Santana, Gravatá",
+ "tipo": "Casa em condomínio",
+ "categoria": "terreno",
+ "cidade": "Gravatá",
+ "preco": "R$ 500.000",
+ "formato": "INVESTIMENTO",
+ "gancho": "Onde você construiria sua casa?",
+ "musica": "mixkit-180.mp3",
+ "estilo_musical": "reels-musicas",
+ "fotos_usadas": [
+  0,
+  9,
+  1,
+  3,
+  4,
+  6,
+  11,
+  13,
+  14,
+  15
+ ],
+ "notas_fotos": {
+  "0": {
+   "nota": 90.2,
+   "ia": null,
+   "externa": true
+  },
+  "9": {
+   "nota": 80.6,
+   "ia": null,
+   "externa": true
+  },
+  "1": {
+   "nota": 78.0,
+   "ia": null,
+   "externa": false
+  },
+  "3": {
+   "nota": 79.0,
+   "ia": null,
+   "externa": false
+  },
+  "4": {
+   "nota": 76.9,
+   "ia": null,
+   "externa": false
+  },
+  "6": {
+   "nota": 81.2,
+   "ia": null,
+   "externa": false
+  },
+  "11": {
+   "nota": 77.0,
+   "ia": null,
+   "externa": false
+  },
+  "13": {
+   "nota": 76.6,
+   "ia": null,
+   "externa": false
+  },
+  "14": {
+   "nota": 76.9,
+   "ia": null,
+   "externa": false
+  },
+  "15": {
+   "nota": 77.0,
+   "ia": null,
+   "externa": false
+  }
+ },
+ "reel": {
+  "duracao": 30.3,
+  "resolucao": [
+   1080,
+   1920
+  ],
+  "audio": true,
+  "tamanho_mb": 13.34
+ },
+ "stories": [
+  {
+   "duracao": 5.0,
+   "resolucao": [
+    1080,
+    1920
+   ],
+   "audio": true,
+   "tamanho_mb": 2.18
+  },
+  {
+   "duracao": 5.0,
+   "resolucao": [
+    1080,
+    1920
+   ],
+   "audio": true,
+   "tamanho_mb": 2.78
+  },
+  {
+   "duracao": 5.0,
+   "resolucao": [
+    1080,
+    1920
+   ],
+   "audio": true,
+   "tamanho_mb": 3.23
+  },
+  {
+   "duracao": 5.0,
+   "resolucao": [
+    1080,
+    1920
+   ],
+   "audio": true,
+   "tamanho_mb": 1.13
+  }
+ ],
+ "arquivos": {
+  "reel": "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-10-10_AR-0147/reel.mp4",
+  "capa": "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-10-10_AR-0147/capa.jpg",
+  "stories": [
+   "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-10-10_AR-0147/story1.mp4",
+   "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-10-10_AR-0147/story2.mp4",
+   "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-10-10_AR-0147/story3.mp4",
+   "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-10-10_AR-0147/story4.mp4"
+  ],
+  "legenda": "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-10-10_AR-0147/legenda.txt"
+ },
+ "problemas": [],
+ "avisos": [
+  "Imóvel só com fotos antigas: 10 foto(s) com faixa verde usadas JÁ CORTADAS (faixa e equipe removidas automaticamente): [0, 9, 1, 3, 4, 6, 11, 13, 14, 15]"
+ ],
+ "aprovado_qc": true
+}

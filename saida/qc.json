@@ -1,0 +1,141 @@
+{
+ "data": "2026-10-17",
+ "codigo": "AR-0089",
+ "codigo_rjweb": "1549",
+ "titulo": "Casa fora de condomínio em Gravatá",
+ "tipo": "Casa fora de condomínio",
+ "categoria": "urbano",
+ "cidade": "Gravatá",
+ "preco": "R$ 480.000",
+ "formato": "PRECO",
+ "gancho": "Salve antes que alguém compre",
+ "musica": "mixkit-109.mp3",
+ "estilo_musical": "reels-musicas",
+ "fotos_usadas": [
+  2,
+  0,
+  1,
+  3,
+  4,
+  5,
+  6,
+  7,
+  13,
+  16
+ ],
+ "notas_fotos": {
+  "2": {
+   "nota": 94.8,
+   "ia": null,
+   "externa": true
+  },
+  "0": {
+   "nota": 88.0,
+   "ia": null,
+   "externa": true
+  },
+  "1": {
+   "nota": 94.7,
+   "ia": null,
+   "externa": true
+  },
+  "3": {
+   "nota": 90.0,
+   "ia": null,
+   "externa": true
+  },
+  "4": {
+   "nota": 77.0,
+   "ia": null,
+   "externa": false
+  },
+  "5": {
+   "nota": 81.6,
+   "ia": null,
+   "externa": false
+  },
+  "6": {
+   "nota": 76.5,
+   "ia": null,
+   "externa": false
+  },
+  "7": {
+   "nota": 76.4,
+   "ia": null,
+   "externa": false
+  },
+  "13": {
+   "nota": 78.2,
+   "ia": null,
+   "externa": false
+  },
+  "16": {
+   "nota": 78.7,
+   "ia": null,
+   "externa": false
+  }
+ },
+ "reel": {
+  "duracao": 30.3,
+  "resolucao": [
+   1080,
+   1920
+  ],
+  "audio": true,
+  "tamanho_mb": 16.78
+ },
+ "stories": [
+  {
+   "duracao": 5.0,
+   "resolucao": [
+    1080,
+    1920
+   ],
+   "audio": true,
+   "tamanho_mb": 3.32
+  },
+  {
+   "duracao": 5.0,
+   "resolucao": [
+    1080,
+    1920
+   ],
+   "audio": true,
+   "tamanho_mb": 4.01
+  },
+  {
+   "duracao": 5.0,
+   "resolucao": [
+    1080,
+    1920
+   ],
+   "audio": true,
+   "tamanho_mb": 2.83
+  },
+  {
+   "duracao": 5.0,
+   "resolucao": [
+    1080,
+    1920
+   ],
+   "audio": true,
+   "tamanho_mb": 1.14
+  }
+ ],
+ "arquivos": {
+  "reel": "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-10-17_AR-0089/reel.mp4",
+  "capa": "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-10-17_AR-0089/capa.jpg",
+  "stories": [
+   "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-10-17_AR-0089/story1.mp4",
+   "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-10-17_AR-0089/story2.mp4",
+   "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-10-17_AR-0089/story3.mp4",
+   "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-10-17_AR-0089/story4.mp4"
+  ],
+  "legenda": "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-10-17_AR-0089/legenda.txt"
+ },
+ "problemas": [],
+ "avisos": [
+  "Imóvel só com fotos antigas: 10 foto(s) com faixa verde usadas JÁ CORTADAS (faixa e equipe removidas automaticamente): [2, 0, 1, 3, 4, 5, 6, 7, 13, 16]"
+ ],
+ "aprovado_qc": true
+}

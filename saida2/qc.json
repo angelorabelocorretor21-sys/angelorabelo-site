@@ -1,0 +1,141 @@
+{
+ "data": "2026-10-17",
+ "codigo": "AR-0070",
+ "codigo_rjweb": "1257",
+ "titulo": "Casa de Alto Padrão com Vista Panorâmica – Chã Grande/PE",
+ "tipo": "Casa em condomínio",
+ "categoria": "urbano",
+ "cidade": "Chã Grande",
+ "preco": "R$ 4.300.000",
+ "formato": "CURIOSIDADE",
+ "gancho": "Este imóvel em Chã Grande chama atenção",
+ "musica": "mixkit-109.mp3",
+ "estilo_musical": "reels-musicas",
+ "fotos_usadas": [
+  0,
+  1,
+  4,
+  12,
+  26,
+  28,
+  2,
+  5,
+  7,
+  25
+ ],
+ "notas_fotos": {
+  "0": {
+   "nota": 83.5,
+   "ia": null,
+   "externa": true
+  },
+  "1": {
+   "nota": 83.0,
+   "ia": null,
+   "externa": true
+  },
+  "4": {
+   "nota": 81.8,
+   "ia": null,
+   "externa": true
+  },
+  "12": {
+   "nota": 77.3,
+   "ia": null,
+   "externa": true
+  },
+  "26": {
+   "nota": 75.1,
+   "ia": null,
+   "externa": true
+  },
+  "28": {
+   "nota": 80.1,
+   "ia": null,
+   "externa": true
+  },
+  "2": {
+   "nota": 71.6,
+   "ia": null,
+   "externa": false
+  },
+  "5": {
+   "nota": 76.9,
+   "ia": null,
+   "externa": false
+  },
+  "7": {
+   "nota": 79.1,
+   "ia": null,
+   "externa": false
+  },
+  "25": {
+   "nota": 73.2,
+   "ia": null,
+   "externa": false
+  }
+ },
+ "reel": {
+  "duracao": 30.7,
+  "resolucao": [
+   1080,
+   1920
+  ],
+  "audio": true,
+  "tamanho_mb": 12.19
+ },
+ "stories": [
+  {
+   "duracao": 5.0,
+   "resolucao": [
+    1080,
+    1920
+   ],
+   "audio": true,
+   "tamanho_mb": 2.67
+  },
+  {
+   "duracao": 5.0,
+   "resolucao": [
+    1080,
+    1920
+   ],
+   "audio": true,
+   "tamanho_mb": 1.93
+  },
+  {
+   "duracao": 5.0,
+   "resolucao": [
+    1080,
+    1920
+   ],
+   "audio": true,
+   "tamanho_mb": 1.57
+  },
+  {
+   "duracao": 5.0,
+   "resolucao": [
+    1080,
+    1920
+   ],
+   "audio": true,
+   "tamanho_mb": 1.14
+  }
+ ],
+ "arquivos": {
+  "reel": "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-10-17_AR-0070/reel.mp4",
+  "capa": "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-10-17_AR-0070/capa.jpg",
+  "stories": [
+   "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-10-17_AR-0070/story1.mp4",
+   "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-10-17_AR-0070/story2.mp4",
+   "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-10-17_AR-0070/story3.mp4",
+   "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-10-17_AR-0070/story4.mp4"
+  ],
+  "legenda": "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-10-17_AR-0070/legenda.txt"
+ },
+ "problemas": [],
+ "avisos": [
+  "Imóvel só com fotos antigas: 10 foto(s) com faixa verde usadas JÁ CORTADAS (faixa e equipe removidas automaticamente): [0, 1, 4, 12, 26, 28, 2, 5, 7, 25]"
+ ],
+ "aprovado_qc": true
+}

@@ -1,0 +1,64 @@
+{
+ "id": "auto-2026-10-23",
+ "acao": "auto",
+ "data": "2026-10-23",
+ "codigo": "AR-0042",
+ "ok": true,
+ "rc": 0,
+ "categoria_dia": "Sex potencial comercial",
+ "tentativas": [
+  {
+   "codigo": "AR-0024",
+   "motivo": "QC: Legenda com números fora do cadastro: '0024' em: ✨ ESPAÇO, NATUREZA E PATRIMÔNIO EM GRAVATÁ!\n\nSeu refúgio no campo em Gravatá\n\n🏡 Fazenda com 30 hectares em Gravatá - PE.\n\nNatureza, espaço e tranquilidade num só lugar. Uma propriedade para viver, produzir ou descansar longe da correria da cidade.\n\n👉✨"
+  },
+  {
+   "codigo": "AR-0035",
+   "motivo": "QC: , tmp)\n  File \"/home/runner/work/angelorabelo-site/angelorabelo-site/ferramentas/reels/gerar_reel.py\", line 768, in cena\n    ff(args)\n  File \"/home/runner/work/angelorabelo-site/angelorabelo-site/ferramentas/reels/gerar_reel.py\", line 690, in ff\n    raise RuntimeError(\"ffmpeg falhou: \" + r.stderr[-1"
+  }
+ ],
+ "codigo2": "AR-0081",
+ "ok2": true,
+ "rc2": 0,
+ "categoria_dia2": "Seg residencial",
+ "tentativas2": [
+  {
+   "codigo": "AR-0146",
+   "motivo": "QC: tmp)\n  File \"/home/runner/work/angelorabelo-site/angelorabelo-site/ferramentas/reels/gerar_reel.py\", line 768, in cena\n    ff(args)\n  File \"/home/runner/work/angelorabelo-site/angelorabelo-site/ferramentas/reels/gerar_reel.py\", line 690, in ff\n    raise RuntimeError(\"ffmpeg falhou: \" + r.stderr[-150"
+  },
+  {
+   "codigo": "AR-0119",
+   "motivo": "QC: , tmp)\n  File \"/home/runner/work/angelorabelo-site/angelorabelo-site/ferramentas/reels/gerar_reel.py\", line 768, in cena\n    ff(args)\n  File \"/home/runner/work/angelorabelo-site/angelorabelo-site/ferramentas/reels/gerar_reel.py\", line 690, in ff\n    raise RuntimeError(\"ffmpeg falhou: \" + r.stderr[-1"
+  }
+ ],
+ "musicas": 12,
+ "arquivos": [
+  "capa.jpg",
+  "contato.jpg",
+  "erro.txt",
+  "legenda.txt",
+  "qc.json",
+  "quadros.jpg",
+  "reel.mp4",
+  "resultado.json",
+  "roteiro.json",
+  "story1.mp4",
+  "story2.mp4",
+  "story3.mp4",
+  "story4.mp4"
+ ],
+ "arquivos2": [
+  "capa.jpg",
+  "contato.jpg",
+  "erro.txt",
+  "legenda.txt",
+  "qc.json",
+  "quadros.jpg",
+  "reel.mp4",
+  "resultado.json",
+  "roteiro.json",
+  "story1.mp4",
+  "story2.mp4",
+  "story3.mp4",
+  "story4.mp4"
+ ]
+}

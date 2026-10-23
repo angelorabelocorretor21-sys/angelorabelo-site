@@ -1,0 +1,6 @@
+{'rural': {'encontradas': 0, 'suaves': 0, 'baixadas': 0}, 'urbano': {'encontradas': 0, 'suaves': 0, 'baixadas': 0}}
+WARNING: The directory '/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.cache/pip' or its parent directory is not owned or is not writable by the current user. The cache has been disabled. Check the permissions and owner of that directory. If executing pip with sudo, you should use sudo's -H flag.
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
+WARNING: The directory '/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.cache/pip' or its parent directory is not owned or is not writable by the current user. The cache has been disabled. Check the permissions and owner of that directory. If executing pip with sudo, you should use sudo's -H flag.
+ERROR: Cannot uninstall typing_extensions 4.10.0, RECORD file not found. Hint: The package was installed by debian.
+  avaliador de IA indisponível: No module named 'open_clip'

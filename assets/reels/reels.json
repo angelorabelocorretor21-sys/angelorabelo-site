@@ -1,5 +1,19 @@
 [
  {
+  "codigo": "AR-0074",
+  "data": "2026-10-29",
+  "video": "/assets/reels/AR-0074.mp4",
+  "capa": "/assets/reels/AR-0074.jpg",
+  "duracao": 29.6
+ },
+ {
+  "codigo": "AR-0014",
+  "data": "2026-10-29",
+  "video": "/assets/reels/AR-0014.mp4",
+  "capa": "/assets/reels/AR-0014.jpg",
+  "duracao": 29.9
+ },
+ {
   "codigo": "AR-0078",
   "data": "2026-10-28",
   "video": "/assets/reels/AR-0078.mp4",

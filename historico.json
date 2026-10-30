@@ -1,0 +1,524 @@
+[
+ {
+  "data": "2026-09-25",
+  "codigo": "AR-0060",
+  "formato": "TOUR",
+  "gancho": "Uma casa com 9 quartos em Gravatá",
+  "origem": "manual"
+ },
+ {
+  "data": "2026-09-26",
+  "codigo": "AR-0130",
+  "formato": "LISTA",
+  "gancho": "Uma mansão com 12 suítes em Gravatá",
+  "origem": "manual"
+ },
+ {
+  "data": "2026-09-27",
+  "codigo": "AR-0057",
+  "formato": "CURIOSIDADE",
+  "gancho": "Uma propriedade rural para conhecer",
+  "origem": "auto"
+ },
+ {
+  "data": "2026-09-28",
+  "codigo": "AR-0134",
+  "formato": "LOCALIZACAO",
+  "gancho": "Um lar pensado para a família",
+  "origem": "auto"
+ },
+ {
+  "data": "2026-09-29",
+  "codigo": "AR-0087",
+  "formato": "TOUR",
+  "gancho": "Repare nos detalhes deste imóvel",
+  "origem": "auto"
+ },
+ {
+  "data": "2026-09-30",
+  "codigo": "AR-0139",
+  "formato": "LISTA",
+  "gancho": "Olha o que está à venda em Sairé",
+  "origem": "auto"
+ },
+ {
+  "data": "2026-10-01",
+  "codigo": "AR-0105",
+  "formato": "PRECO",
+  "gancho": "Esse pode ser o seu refúgio no campo",
+  "origem": "auto",
+  "vaga": 1
+ },
+ {
+  "data": "2026-10-01",
+  "codigo": "AR-0001",
+  "formato": "OPORTUNIDADE",
+  "gancho": "Seu negócio merece este espaço",
+  "origem": "auto",
+  "vaga": 2
+ },
+ {
+  "data": "2026-10-02",
+  "codigo": "AR-0017",
+  "formato": "LOCALIZACAO",
+  "gancho": "Seu refúgio no Agreste",
+  "origem": "auto",
+  "vaga": 1
+ },
+ {
+  "data": "2026-10-02",
+  "codigo": "AR-0140",
+  "formato": "LISTA",
+  "gancho": "Quanto você pagaria por este imóvel?",
+  "origem": "auto",
+  "vaga": 2
+ },
+ {
+  "data": "2026-10-03",
+  "codigo": "AR-0138",
+  "formato": "TOUR",
+  "gancho": "Esse pode ser o seu novo lar",
+  "origem": "auto",
+  "vaga": 1
+ },
+ {
+  "data": "2026-10-03",
+  "codigo": "AR-0136",
+  "formato": "OPORTUNIDADE",
+  "gancho": "Este imóvel em Recife chama atenção",
+  "origem": "auto",
+  "vaga": 2
+ },
+ {
+  "data": "2026-10-04",
+  "codigo": "AR-0118",
+  "formato": "CURIOSIDADE",
+  "gancho": "Olha essa propriedade em Gravatá",
+  "origem": "auto",
+  "vaga": 1
+ },
+ {
+  "data": "2026-10-04",
+  "codigo": "AR-0137",
+  "formato": "ESTILO_DE_VIDA",
+  "gancho": "Seu próximo endereço em Gravatá?",
+  "origem": "auto",
+  "vaga": 2
+ },
+ {
+  "data": "2026-10-05",
+  "codigo": "AR-0133",
+  "formato": "PRECO",
+  "gancho": "Conheça este imóvel em Gravatá",
+  "origem": "auto",
+  "vaga": 1
+ },
+ {
+  "data": "2026-10-05",
+  "codigo": "AR-0090",
+  "formato": "LISTA",
+  "gancho": "Já pensou em viver no campo?",
+  "origem": "auto",
+  "vaga": 2
+ },
+ {
+  "data": "2026-10-06",
+  "codigo": "AR-0082",
+  "formato": "LOCALIZACAO",
+  "gancho": "Este imóvel em Gravatá chama atenção",
+  "origem": "auto",
+  "vaga": 1
+ },
+ {
+  "data": "2026-10-06",
+  "codigo": "AR-0047",
+  "formato": "CURIOSIDADE",
+  "gancho": "Imagine acordar com essa vista do campo",
+  "origem": "auto",
+  "vaga": 2
+ },
+ {
+  "data": "2026-10-07",
+  "codigo": "AR-0132",
+  "formato": "TOUR",
+  "gancho": "Você moraria em um lugar assim?",
+  "origem": "auto",
+  "vaga": 1
+ },
+ {
+  "data": "2026-10-07",
+  "codigo": "AR-0123",
+  "formato": "OPORTUNIDADE",
+  "gancho": "Repare nos detalhes deste imóvel",
+  "origem": "auto",
+  "vaga": 2
+ },
+ {
+  "data": "2026-10-08",
+  "codigo": "AR-0142",
+  "formato": "LISTA",
+  "gancho": "Paz e espaço em Gravatá",
+  "origem": "auto",
+  "vaga": 1
+ },
+ {
+  "data": "2026-10-08",
+  "codigo": "AR-0049",
+  "formato": "ESTILO_DE_VIDA",
+  "gancho": "Paz e espaço em Amaraji",
+  "origem": "auto",
+  "vaga": 2
+ },
+ {
+  "data": "2026-10-09",
+  "codigo": "AR-0054",
+  "formato": "PRECO",
+  "gancho": "O sonho de ter terra em Gravatá",
+  "origem": "auto",
+  "vaga": 1
+ },
+ {
+  "data": "2026-10-09",
+  "codigo": "AR-0125",
+  "formato": "CURIOSIDADE",
+  "gancho": "Imagine chegar em casa e ver isso",
+  "origem": "auto",
+  "vaga": 2
+ },
+ {
+  "data": "2026-10-10",
+  "codigo": "AR-0147",
+  "formato": "INVESTIMENTO",
+  "gancho": "Onde você construiria sua casa?",
+  "origem": "auto",
+  "vaga": 1
+ },
+ {
+  "data": "2026-10-10",
+  "codigo": "AR-0145",
+  "formato": "ESTILO_DE_VIDA",
+  "gancho": "Tour rápido por este imóvel em Sairé",
+  "origem": "auto",
+  "vaga": 2
+ },
+ {
+  "data": "2026-10-11",
+  "codigo": "AR-0062",
+  "formato": "TOUR",
+  "gancho": "Terra boa à venda em Gravatá",
+  "origem": "auto",
+  "vaga": 1
+ },
+ {
+  "data": "2026-10-11",
+  "codigo": "AR-0122",
+  "formato": "PRECO",
+  "gancho": "Morar bem em Gravatá é assim",
+  "origem": "auto",
+  "vaga": 2
+ },
+ {
+  "data": "2026-10-12",
+  "codigo": "AR-0100",
+  "formato": "CURIOSIDADE",
+  "gancho": "Seu próximo endereço em Gravatá?",
+  "origem": "auto",
+  "vaga": 1
+ },
+ {
+  "data": "2026-10-12",
+  "codigo": "AR-0030",
+  "formato": "ESTILO_DE_VIDA",
+  "gancho": "Esse pode ser o seu refúgio no campo",
+  "origem": "auto",
+  "vaga": 2
+ },
+ {
+  "data": "2026-10-13",
+  "codigo": "AR-0075",
+  "formato": "OPORTUNIDADE",
+  "gancho": "Um lar pensado para a família",
+  "origem": "auto",
+  "vaga": 1
+ },
+ {
+  "data": "2026-10-13",
+  "codigo": "AR-0046",
+  "formato": "LISTA",
+  "gancho": "Já pensou em viver no campo?",
+  "origem": "auto",
+  "vaga": 2
+ },
+ {
+  "data": "2026-10-14",
+  "codigo": "AR-0095",
+  "formato": "LOCALIZACAO",
+  "gancho": "Esse pode ser o seu novo lar",
+  "origem": "auto",
+  "vaga": 1
+ },
+ {
+  "data": "2026-10-14",
+  "codigo": "AR-0114",
+  "formato": "CURIOSIDADE",
+  "gancho": "Quanto você pagaria por este imóvel?",
+  "origem": "auto",
+  "vaga": 2
+ },
+ {
+  "data": "2026-10-15",
+  "codigo": "AR-0135",
+  "formato": "TOUR",
+  "gancho": "Espera até ver o tamanho disso",
+  "origem": "auto",
+  "vaga": 1
+ },
+ {
+  "data": "2026-10-15",
+  "codigo": "AR-0026",
+  "formato": "OPORTUNIDADE",
+  "gancho": "Você trocaria a cidade por isso?",
+  "origem": "auto",
+  "vaga": 2
+ },
+ {
+  "data": "2026-10-16",
+  "codigo": "AR-0048",
+  "formato": "LISTA",
+  "gancho": "Paz e espaço em Amaraji",
+  "origem": "auto",
+  "vaga": 1
+ },
+ {
+  "data": "2026-10-16",
+  "codigo": "AR-0094",
+  "formato": "ESTILO_DE_VIDA",
+  "gancho": "Repare nos detalhes deste imóvel",
+  "origem": "auto",
+  "vaga": 2
+ },
+ {
+  "data": "2026-10-17",
+  "codigo": "AR-0089",
+  "formato": "PRECO",
+  "gancho": "Salve antes que alguém compre",
+  "origem": "auto",
+  "vaga": 1
+ },
+ {
+  "data": "2026-10-17",
+  "codigo": "AR-0070",
+  "formato": "CURIOSIDADE",
+  "gancho": "Este imóvel em Chã Grande chama atenção",
+  "origem": "auto",
+  "vaga": 2
+ },
+ {
+  "data": "2026-10-18",
+  "codigo": "AR-0131",
+  "formato": "LOCALIZACAO",
+  "gancho": "Tour pela propriedade em Bonito",
+  "origem": "auto",
+  "vaga": 1
+ },
+ {
+  "data": "2026-10-18",
+  "codigo": "AR-0086",
+  "formato": "LISTA",
+  "gancho": "Imagine chegar em casa e ver isso",
+  "origem": "auto",
+  "vaga": 2
+ },
+ {
+  "data": "2026-10-19",
+  "codigo": "AR-0088",
+  "formato": "TOUR",
+  "gancho": "Você não vai acreditar nesta vista",
+  "origem": "auto",
+  "vaga": 1
+ },
+ {
+  "data": "2026-10-19",
+  "codigo": "AR-0129",
+  "formato": "OPORTUNIDADE",
+  "gancho": "O sonho de ter terra em Pombos",
+  "origem": "auto",
+  "vaga": 2
+ },
+ {
+  "data": "2026-10-20",
+  "codigo": "AR-0053",
+  "formato": "CURIOSIDADE",
+  "gancho": "Espera até ver por dentro",
+  "origem": "auto",
+  "vaga": 1
+ },
+ {
+  "data": "2026-10-20",
+  "codigo": "AR-0066",
+  "formato": "ESTILO_DE_VIDA",
+  "gancho": "Paz e espaço em Chã Grande",
+  "origem": "auto",
+  "vaga": 2
+ },
+ {
+  "data": "2026-10-21",
+  "codigo": "AR-0077",
+  "formato": "PRECO",
+  "gancho": "Tour rápido por este imóvel em Gravatá",
+  "origem": "auto",
+  "vaga": 1
+ },
+ {
+  "data": "2026-10-21",
+  "codigo": "AR-0084",
+  "formato": "LISTA",
+  "gancho": "Um lar pensado para a família",
+  "origem": "auto",
+  "vaga": 2
+ },
+ {
+  "data": "2026-10-22",
+  "codigo": "AR-0124",
+  "formato": "LOCALIZACAO",
+  "gancho": "Paz e espaço em Tamandaré",
+  "origem": "auto",
+  "vaga": 1
+ },
+ {
+  "data": "2026-10-22",
+  "codigo": "AR-0064",
+  "formato": "CURIOSIDADE",
+  "gancho": "Terra boa à venda em Chã Grande",
+  "origem": "auto",
+  "vaga": 2
+ },
+ {
+  "data": "2026-10-23",
+  "codigo": "AR-0042",
+  "formato": "TOUR",
+  "gancho": "Seu refúgio no campo em Gravatá",
+  "origem": "auto",
+  "vaga": 1
+ },
+ {
+  "data": "2026-10-23",
+  "codigo": "AR-0081",
+  "formato": "OPORTUNIDADE",
+  "gancho": "Morar bem em Gravatá é assim",
+  "origem": "auto",
+  "vaga": 2
+ },
+ {
+  "data": "2026-10-24",
+  "codigo": "AR-0080",
+  "formato": "LISTA",
+  "gancho": "Olha o que está à venda em Gravatá",
+  "origem": "auto",
+  "vaga": 1
+ },
+ {
+  "data": "2026-10-24",
+  "codigo": "AR-0031",
+  "formato": "ESTILO_DE_VIDA",
+  "gancho": "Você moraria em um lugar assim?",
+  "origem": "auto",
+  "vaga": 2
+ },
+ {
+  "data": "2026-10-25",
+  "codigo": "AR-0055",
+  "formato": "PRECO",
+  "gancho": "Paz e espaço em Gravatá",
+  "origem": "auto",
+  "vaga": 1
+ },
+ {
+  "data": "2026-10-25",
+  "codigo": "AR-0076",
+  "formato": "CURIOSIDADE",
+  "gancho": "Quanto você pagaria por este imóvel?",
+  "origem": "auto",
+  "vaga": 2
+ },
+ {
+  "data": "2026-10-26",
+  "codigo": "AR-0079",
+  "formato": "LOCALIZACAO",
+  "gancho": "Este imóvel em Gravatá chama atenção",
+  "origem": "auto",
+  "vaga": 1
+ },
+ {
+  "data": "2026-10-26",
+  "codigo": "AR-0092",
+  "formato": "LISTA",
+  "gancho": "Oportunidade no campo em Amaraji",
+  "origem": "auto",
+  "vaga": 2
+ },
+ {
+  "data": "2026-10-27",
+  "codigo": "AR-0002",
+  "formato": "TOUR",
+  "gancho": "Conheça este imóvel em Gravatá",
+  "origem": "auto",
+  "vaga": 1
+ },
+ {
+  "data": "2026-10-27",
+  "codigo": "AR-0044",
+  "formato": "OPORTUNIDADE",
+  "gancho": "Terra boa à venda em Gravatá",
+  "origem": "auto",
+  "vaga": 2
+ },
+ {
+  "data": "2026-10-28",
+  "codigo": "AR-0072",
+  "formato": "CURIOSIDADE",
+  "gancho": "Esse pode ser o seu novo lar",
+  "origem": "auto",
+  "vaga": 1
+ },
+ {
+  "data": "2026-10-28",
+  "codigo": "AR-0078",
+  "formato": "ESTILO_DE_VIDA",
+  "gancho": "Você não vai acreditar nesta vista",
+  "origem": "auto",
+  "vaga": 2
+ },
+ {
+  "data": "2026-10-29",
+  "codigo": "AR-0074",
+  "formato": "PRECO",
+  "gancho": "Salve antes que alguém compre",
+  "origem": "auto",
+  "vaga": 1
+ },
+ {
+  "data": "2026-10-29",
+  "codigo": "AR-0014",
+  "formato": "LISTA",
+  "gancho": "Tour rápido por este imóvel em Gravatá",
+  "origem": "auto",
+  "vaga": 2
+ },
+ {
+  "data": "2026-10-30",
+  "codigo": "AR-0013",
+  "formato": "LOCALIZACAO",
+  "gancho": "Tour pela propriedade em Gravatá",
+  "origem": "auto",
+  "vaga": 1
+ },
+ {
+  "data": "2026-10-30",
+  "codigo": "AR-0005",
+  "formato": "CURIOSIDADE",
+  "gancho": "Seu próximo endereço em Gravatá?",
+  "origem": "auto",
+  "vaga": 2
+ }
+]

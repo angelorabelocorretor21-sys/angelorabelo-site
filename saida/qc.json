@@ -1,0 +1,141 @@
+{
+ "data": "2026-10-30",
+ "codigo": "AR-0013",
+ "codigo_rjweb": "643",
+ "titulo": "Chácara 4 ha à Venda em Gravatá/PE",
+ "tipo": "Chácara",
+ "categoria": "rural",
+ "cidade": "Gravatá",
+ "preco": "R$ 3.800.000",
+ "formato": "LOCALIZACAO",
+ "gancho": "Tour pela propriedade em Gravatá",
+ "musica": "mixkit-124.mp3",
+ "estilo_musical": "reels-musicas",
+ "fotos_usadas": [
+  1,
+  2,
+  4,
+  9,
+  12,
+  13,
+  14,
+  17,
+  19,
+  25
+ ],
+ "notas_fotos": {
+  "1": {
+   "nota": 92.7,
+   "ia": null,
+   "externa": true
+  },
+  "2": {
+   "nota": 86.1,
+   "ia": null,
+   "externa": true
+  },
+  "4": {
+   "nota": 85.9,
+   "ia": null,
+   "externa": true
+  },
+  "9": {
+   "nota": 84.7,
+   "ia": null,
+   "externa": true
+  },
+  "12": {
+   "nota": 84.6,
+   "ia": null,
+   "externa": true
+  },
+  "13": {
+   "nota": 84.4,
+   "ia": null,
+   "externa": true
+  },
+  "14": {
+   "nota": 85.8,
+   "ia": null,
+   "externa": true
+  },
+  "17": {
+   "nota": 85.8,
+   "ia": null,
+   "externa": true
+  },
+  "19": {
+   "nota": 84.6,
+   "ia": null,
+   "externa": true
+  },
+  "25": {
+   "nota": 88.3,
+   "ia": null,
+   "externa": true
+  }
+ },
+ "reel": {
+  "duracao": 29.9,
+  "resolucao": [
+   1080,
+   1920
+  ],
+  "audio": true,
+  "tamanho_mb": 13.74
+ },
+ "stories": [
+  {
+   "duracao": 5.0,
+   "resolucao": [
+    1080,
+    1920
+   ],
+   "audio": true,
+   "tamanho_mb": 2.45
+  },
+  {
+   "duracao": 5.0,
+   "resolucao": [
+    1080,
+    1920
+   ],
+   "audio": true,
+   "tamanho_mb": 3.18
+  },
+  {
+   "duracao": 5.0,
+   "resolucao": [
+    1080,
+    1920
+   ],
+   "audio": true,
+   "tamanho_mb": 1.76
+  },
+  {
+   "duracao": 5.0,
+   "resolucao": [
+    1080,
+    1920
+   ],
+   "audio": true,
+   "tamanho_mb": 1.14
+  }
+ ],
+ "arquivos": {
+  "reel": "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-10-30_AR-0013/reel.mp4",
+  "capa": "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-10-30_AR-0013/capa.jpg",
+  "stories": [
+   "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-10-30_AR-0013/story1.mp4",
+   "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-10-30_AR-0013/story2.mp4",
+   "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-10-30_AR-0013/story3.mp4",
+   "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-10-30_AR-0013/story4.mp4"
+  ],
+  "legenda": "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-10-30_AR-0013/legenda.txt"
+ },
+ "problemas": [],
+ "avisos": [
+  "Imóvel só com fotos antigas: 10 foto(s) com faixa verde usadas JÁ CORTADAS (faixa e equipe removidas automaticamente): [1, 2, 4, 9, 12, 13, 14, 17, 19, 25]"
+ ],
+ "aprovado_qc": true
+}

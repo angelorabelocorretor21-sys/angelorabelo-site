@@ -932,7 +932,7 @@ def cmd_gerar(caminho_roteiro):
     tipo_txt = limpa(im.get("tipo") or "")
     itens_ficha = ([tipo_txt] if tipo_txt else []) + fch + [local_txt(im)]
     rotulo = "Valor de venda" if im.get("venda") else "Valor"
-    preco_cedo = mostrar_preco and formato in ("PRECO", "OPORTUNIDADE", "INVESTIMENTO")
+    preco_cedo = mostrar_preco and (bool(R.get("preco_cedo")) or formato in ("PRECO", "OPORTUNIDADE", "INVESTIMENTO"))
     corte = 2.0 if formato == "TOUR" else 2.4
     add(fila.pop(0), 3.2, "gancho", {"texto": limpa(R["gancho"]), "sub": limpa(R.get("gancho_sub", ""))}, 0)
     i = 1

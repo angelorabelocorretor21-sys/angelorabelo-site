@@ -266,6 +266,80 @@ def legenda_v3(im, cat, gancho_video, semente):
     return "\n".join(linhas)
 
 
+# 01/11/2026 (Projeto 400K): os Reels que mais cresceram abriam com NÚMERO + PERGUNTA
+# ("230 hectares por R$ 1,5 milhão. Caro ou barato?"). Os números saem SÓ do cadastro
+# (venda, areaTotal/areaUtil ou a área escrita no título) — nada é inventado.
+def _preco_curto(v):
+    if v >= 1_000_000:
+        m = v / 1_000_000
+        t = f"{m:.2f}".rstrip("0").rstrip(".").replace(".", ",")
+        return f"R$ {t} milhão" if m < 2 else f"R$ {t} milhões"
+    return f"R$ {int(round(v / 1000))} mil"
+
+
+def _area_m2(im, chaves=("areaTotal", "areaUtil")):
+    import re
+    for k in chaves:
+        try:
+            v = float(im.get(k) or 0)
+        except Exception:
+            v = 0
+        if v > 0:
+            return v
+    t = (im.get("titulo") or "").lower()
+    m = re.search(r"(\d+(?:[.,]\d+)?)\s*(ha\b|hectare)", t)
+    if m:
+        n = m.group(1)
+        if "," in n:
+            n = n.replace(".", "").replace(",", ".")
+        elif re.fullmatch(r"\d{1,3}(\.\d{3})+", n):  # 1.200 ha = mil e duzentos
+            n = n.replace(".", "")
+        try:
+            return float(n) * 10000
+        except Exception:
+            return None
+    m = re.search(r"(\d+(?:\.\d{3})*)\s*m²", t)
+    if m:
+        return float(m.group(1).replace(".", ""))
+    return None
+
+
+def gancho_numero(im, cat, cid, semente):
+    """Gancho com número real + pergunta, e uma frase de apoio (preço por ha/m²). None se faltar dado."""
+    try:
+        v = float(im.get("venda") or 0)
+    except Exception:
+        v = 0
+    if v <= 0:
+        return None, None
+    # casa/apto: preço por m² só com área CONSTRUÍDA; área do lote não serve para essa conta
+    a = _area_m2(im) if cat in ("rural", "terreno", "comercial") else _area_m2(im, ("areaUtil",))
+    if a and a >= 10000 and cat == "urbano":
+        a = None
+    pc = _preco_curto(v)
+    if a and a >= 10000:
+        ha = a / 10000
+        hat = ("{:,}".format(int(ha)).replace(",", ".") if ha >= 100 else f"{ha:.2f}".rstrip("0").rstrip(".").replace(".", ","))
+        un = "hectare" if ha == 1 else "hectares"
+        por = "R$ " + f"{int(round(v / ha)):,}".replace(",", ".") + " por hectare"
+        opcoes = [f"{hat} {un} por {pc}. Caro ou barato?", f"{pc} por {hat} {un}. Vale?",
+                  f"{hat} {un} em {cid}. Quanto vale?"]
+        apoio = por
+    elif a and cat in ("terreno", "urbano", "comercial"):
+        m2 = "{:,}".format(int(a)).replace(",", ".")
+        por = "R$ " + f"{int(round(v / a)):,}".replace(",", ".") + " por m²"
+        opcoes = [f"{m2} m² por {pc}. Caro ou barato?", f"{pc} em {cid}. Vale o preço?",
+                  f"{m2} m² em {cid}. Quanto vale?"]
+        apoio = por
+    else:
+        opcoes = [f"{pc} em {cid}. Caro ou barato?", f"{pc}. Você pagaria?"]
+        apoio = None
+    opcoes = [o for o in opcoes if len(o) <= 45]
+    if not opcoes:
+        return None, None
+    return opcoes[semente % len(opcoes)], apoio
+
+
 def roteiro(im, hist, fotos_ok):
     cat = G.categoria(im)
     cid = (im.get("cidade") or "").strip() or "Pernambuco"
@@ -275,6 +349,9 @@ def roteiro(im, hist, fotos_ok):
     ganchos = [g.format(c=cid) for g in GANCHOS[cat]]
     ganchos = [g for g in ganchos if curto(g) and g not in usados_g] or [g.format(c=cid) for g in GANCHOS[cat]]
     gancho = ganchos[semente % len(ganchos)]
+    g_num, apoio_num = gancho_numero(im, cat, cid, semente)
+    if g_num:
+        gancho = g_num
     formatos = [f for f in FORMATOS if f not in usados_f]
     if cat in ("urbano", "rural"):
         formatos = [f for f in formatos if f != "INVESTIMENTO"] or formatos
@@ -293,6 +370,8 @@ def roteiro(im, hist, fotos_ok):
         if len(destaques) < 2 and tipo: destaques.insert(0, tipo[:40])
     neutras = NEUTRAS[cat]
     destaques.append(neutras[semente % len(neutras)])
+    if g_num and apoio_num:
+        destaques = [apoio_num] + destaques
     destaques = destaques[:4]
     cta = CTAS[semente % len(CTAS)]
     # fotos (09/10/2026): as melhores por nota — abertas, claras, arrumadas; capa = melhor foto externa
@@ -301,6 +380,7 @@ def roteiro(im, hist, fotos_ok):
     return {
         "codigo": im["codigoAR"], "formato": formato, "gancho": gancho, "gancho_sub": tipo[:40] if tipo else "",
         "destaques": destaques, "desejo": DESEJO[cat][semente % len(DESEJO[cat])], "mostrar_preco": True,
+        "preco_cedo": True,
         "cta": cta, "stories": {"gancho": STORY_G[semente % len(STORY_G)], "destaque": (fch[0] + " em " + cid) if fch else f"{tipo} em {cid}"[:45]},
         "fotos": ordem, "legenda": legenda_v3(im, cat, gancho, semente), "hashtags": hashtags(im, cat),
     }

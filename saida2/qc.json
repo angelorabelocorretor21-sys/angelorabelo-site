@@ -1,0 +1,141 @@
+{
+ "data": "2026-11-07",
+ "codigo": "AR-0012",
+ "codigo_rjweb": "666",
+ "titulo": "Casa em Condomínio à Venda em Gravatá/PE",
+ "tipo": "Casa em condomínio",
+ "categoria": "urbano",
+ "cidade": "Gravatá",
+ "preco": "R$ 1.500.000",
+ "formato": "LISTA",
+ "gancho": "R$ 1,5 milhão em Gravatá. Caro ou barato?",
+ "musica": "mixkit-109.mp3",
+ "estilo_musical": "reels-musicas",
+ "fotos_usadas": [
+  3,
+  17,
+  0,
+  1,
+  2,
+  9,
+  13,
+  15,
+  18,
+  19
+ ],
+ "notas_fotos": {
+  "3": {
+   "nota": 85.8,
+   "ia": null,
+   "externa": true
+  },
+  "17": {
+   "nota": 83.6,
+   "ia": null,
+   "externa": true
+  },
+  "0": {
+   "nota": 82.5,
+   "ia": null,
+   "externa": false
+  },
+  "1": {
+   "nota": 78.5,
+   "ia": null,
+   "externa": false
+  },
+  "2": {
+   "nota": 76.5,
+   "ia": null,
+   "externa": false
+  },
+  "9": {
+   "nota": 78.3,
+   "ia": null,
+   "externa": false
+  },
+  "13": {
+   "nota": 77.1,
+   "ia": null,
+   "externa": false
+  },
+  "15": {
+   "nota": 78.9,
+   "ia": null,
+   "externa": false
+  },
+  "18": {
+   "nota": 84.2,
+   "ia": null,
+   "externa": false
+  },
+  "19": {
+   "nota": 83.9,
+   "ia": null,
+   "externa": false
+  }
+ },
+ "reel": {
+  "duracao": 29.5,
+  "resolucao": [
+   1080,
+   1920
+  ],
+  "audio": true,
+  "tamanho_mb": 27.17
+ },
+ "stories": [
+  {
+   "duracao": 5.0,
+   "resolucao": [
+    1080,
+    1920
+   ],
+   "audio": true,
+   "tamanho_mb": 2.79
+  },
+  {
+   "duracao": 5.0,
+   "resolucao": [
+    1080,
+    1920
+   ],
+   "audio": true,
+   "tamanho_mb": 3.57
+  },
+  {
+   "duracao": 5.0,
+   "resolucao": [
+    1080,
+    1920
+   ],
+   "audio": true,
+   "tamanho_mb": 5.41
+  },
+  {
+   "duracao": 5.0,
+   "resolucao": [
+    1080,
+    1920
+   ],
+   "audio": true,
+   "tamanho_mb": 1.26
+  }
+ ],
+ "arquivos": {
+  "reel": "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-11-07_AR-0012/reel.mp4",
+  "capa": "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-11-07_AR-0012/capa.jpg",
+  "stories": [
+   "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-11-07_AR-0012/story1.mp4",
+   "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-11-07_AR-0012/story2.mp4",
+   "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-11-07_AR-0012/story3.mp4",
+   "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-11-07_AR-0012/story4.mp4"
+  ],
+  "legenda": "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-11-07_AR-0012/legenda.txt"
+ },
+ "problemas": [],
+ "avisos": [
+  "Imóvel só com fotos antigas: 10 foto(s) com faixa verde usadas JÁ CORTADAS (faixa e equipe removidas automaticamente): [3, 17, 0, 1, 2, 9, 13, 15, 18, 19]"
+ ],
+ "aprovado_qc": true
+}

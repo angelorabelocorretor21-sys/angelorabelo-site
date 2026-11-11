@@ -1,0 +1,5 @@
+{
+ "_obs": "Fila de prioridade dos Reels (pedido do Angelo em 11/11/2026). Cada código sai uma vez, na frente da categoria do dia. Para incluir novos imóveis, acrescente o código AR aqui. 'chamada': legenda com 'Comente FICHA' + 'Siga @angelorabeloimoveis'.",
+ "codigos": ["AR-0158", "AR-0155", "AR-0156", "AR-0154", "AR-0157"],
+ "chamada": true
+}

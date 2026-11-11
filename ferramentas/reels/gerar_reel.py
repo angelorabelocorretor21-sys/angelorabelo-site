@@ -740,6 +740,9 @@ def cena(foto, dur, mov, sobre, destino, tmp):
         if horizontal and mov in ("pan_esq", "pan_dir"):
             esc = max(H * 1.0 / src.height, W / src.width)
         bw, bh = int(src.width * esc) // 2 * 2, int(src.height * esc) // 2 * 2
+        # 11/11/2026: o arredondamento podia deixar a base 1–2 px menor que 1080x1920 e o crop do ffmpeg
+        # falhava ("Invalid too big or non positive size") — derrubava 2–4 candidatos por dia
+        bw, bh = max(bw, W), max(bh, H)
         base = os.path.join(tmp, os.path.basename(destino) + "_base.jpg")
         src.resize((bw, bh), Image.LANCZOS).save(base, "JPEG", quality=95)
         xmax = min(bw - W, int(bw * lim) - W)
@@ -749,7 +752,7 @@ def cena(foto, dur, mov, sobre, destino, tmp):
             vf = f"crop={W}:{H}:x='{x0}+({x1 - x0})*t/{D}':y='({bh}-{H})/2'"
         else:
             # zoom suave (1,00 → 1,08): a base é redimensionada quadro a quadro e cortada no centro
-            c = max(W / bw, H / bh)
+            c = max(W / bw, H / bh) * 1.004  # folga contra o arredondamento do scale (h=-2)
             z0, z1 = (1.0, 1.08) if mov != "zoom_out" else (1.08, 1.0)
             kw = bw * c
             sw = f"({kw:.2f}*({z0}+({z1 - z0:.3f})*t/{D}))"

@@ -134,6 +134,20 @@ NOMES_DIA = ["Seg residencial", "Ter alto padrão", "Qua investimento/oportunida
              "Sex potencial comercial", "Sáb lazer/fim de semana", "Dom estilo de vida"]
 
 
+PRIORIDADE_ARQ = os.path.join(AQUI, "prioridade.json")
+
+
+def prioridade():
+    """Fila de prioridade (11/11/2026, pedido do Angelo): imóveis novos que ele quer em vídeo primeiro.
+    {"codigos": ["AR-0158", ...], "chamada": true}. Cada código sai uma vez (depois entra no histórico e
+    no rodízio normal). Passa na frente da categoria do dia, mas continua com todas as outras regras."""
+    try:
+        d = json.load(open(PRIORIDADE_ARQ))
+        return [c for c in d.get("codigos", []) if c], bool(d.get("chamada", True))
+    except Exception:
+        return [], False
+
+
 def candidatos(hist):
     limite = HOJE - datetime.timedelta(days=DIAS_RODIZIO)
     recentes = {h["codigo"] for h in hist if datetime.date.fromisoformat(h["data"]) >= limite}
@@ -155,6 +169,12 @@ def candidatos(hist):
         chave = lambda im: (im["codigoAR"] in ja, -valor(im))  # noqa: E731
     do_dia.sort(key=chave)
     resto = sorted([im for im in base if im not in do_dia], key=chave)
+    fila = [c for c in prioridade()[0] if c not in ja]
+    if fila:
+        pos = {c: i for i, c in enumerate(fila)}
+        prio = sorted([im for im in base if im["codigoAR"] in pos], key=lambda im: pos[im["codigoAR"]])
+        do_dia = prio + [im for im in do_dia if im not in prio]
+        resto = [im for im in resto if im not in prio]
     return do_dia, resto
 
 
@@ -212,6 +232,10 @@ FECHA = {
 CTA_LEG = ["👉✨ Quer ver por dentro? Toque no link da bio e digite {cod} — fotos completas e falo com você agora mesmo!",
            "👉✨ Gostou? Comente \"EU QUERO\" ou toque no link da bio e digite {cod} para ver tudo!",
            "👉✨ Me chama no WhatsApp ou toque no link da bio e digite {cod} — respondo rapidinho!"]
+NOVO_VIRAL = ["🔥 ACABOU DE CHEGAR NA VITRINE EM {C}!", "🚨 NOVIDADE EM {C}: QUEM VIU PRIMEIRO, LEVOU!",
+              "✨ LANÇAMENTO NA VITRINE DA RABÊLO EM {C}!"]
+CTA_NOVO = ("👉✨ Comente \"FICHA\" que eu te mando todos os detalhes no direct — ou toque no link da bio e digite {cod}!\n"
+            "🔔 Siga @angelorabeloimoveis e veja os imóveis NOVOS antes de todo mundo.")
 EMAIL = "contato@angelorabeloimoveis.com.br"  # o mesmo publicado no rodapé do site
 
 
@@ -257,8 +281,13 @@ def legenda_v3(im, cat, gancho_video, semente):
     elif au or at: ficha.append(f"📐 {au or at} de área")
     preco = G.preco_txt(im)
     if preco: ficha.append(f"💰 {preco}")
+    cta = CTA_LEG[semente % len(CTA_LEG)].format(cod=cod)
+    fila, chamada = prioridade()
+    if cod in fila and chamada:  # imóvel novo na vitrine: chamada para seguir + comentar (padrão dos Reels manuais)
+        viral = NOVO_VIRAL[semente % len(NOVO_VIRAL)].format(C=cid.upper())
+        cta = CTA_NOVO.format(cod=cod)
     linhas = [viral, "", gancho_video, "", f"🏡 {titulo}", "", " ".join(par), "",
-              CTA_LEG[semente % len(CTA_LEG)].format(cod=cod), "", "📋 FICHA DO IMÓVEL:"] + ficha + [
+              cta, "", "📋 FICHA DO IMÓVEL:"] + ficha + [
               "", FECHA[cat][semente % len(FECHA[cat])], "",
               "📲 Fale comigo agora mesmo:", f"💬 WhatsApp: {G.WHATS}", "🌐 Site: www.angelorabeloimoveis.com.br",
               f"📧 E-mail: {EMAIL}", "", f"— Angelo Rabêlo | Corretor CRECI-PE {G.CRECI} · Perito Avaliador",
@@ -335,6 +364,11 @@ def gancho_numero(im, cat, cid, semente):
         opcoes = [f"{pc} em {cid}. Caro ou barato?", f"{pc}. Você pagaria?"]
         apoio = None
     opcoes = [o for o in opcoes if len(o) <= 45]
+    # 11/11/2026: o QC anti-invenção recusa número que não está no cadastro (R$ por m², R$ por hectare,
+    # hectares convertidos de m²) e derrubava quase todos os candidatos. Só fica o que passa no QC.
+    opcoes = [o for o in opcoes if not G.checa_numeros([o], im)]
+    if apoio and G.checa_numeros([apoio], im):
+        apoio = None
     if not opcoes:
         return None, None
     return opcoes[semente % len(opcoes)], apoio

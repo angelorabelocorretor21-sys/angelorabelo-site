@@ -1,0 +1,141 @@
+{
+ "data": "2026-11-13",
+ "codigo": "AR-0146",
+ "codigo_rjweb": "1607",
+ "titulo": "Apartamento Beira-Mar em Piedade, Jaboatão dos Guararapes-PE",
+ "tipo": "Apartamento em condomínio",
+ "categoria": "urbano",
+ "cidade": "Jaboatão dos Guararapes",
+ "preco": "R$ 900.000",
+ "formato": "ESTILO_DE_VIDA",
+ "gancho": "130 m² por R$ 900 mil. Caro ou barato?",
+ "musica": "mixkit-1009.mp3",
+ "estilo_musical": "reels-musicas",
+ "fotos_usadas": [
+  1,
+  6,
+  7,
+  17,
+  4,
+  9,
+  10,
+  19,
+  23,
+  26
+ ],
+ "notas_fotos": {
+  "1": {
+   "nota": 88.6,
+   "ia": null,
+   "externa": true
+  },
+  "6": {
+   "nota": 76.0,
+   "ia": null,
+   "externa": true
+  },
+  "7": {
+   "nota": 74.3,
+   "ia": null,
+   "externa": true
+  },
+  "17": {
+   "nota": 86.3,
+   "ia": null,
+   "externa": true
+  },
+  "4": {
+   "nota": 74.5,
+   "ia": null,
+   "externa": false
+  },
+  "9": {
+   "nota": 79.1,
+   "ia": null,
+   "externa": false
+  },
+  "10": {
+   "nota": 76.1,
+   "ia": null,
+   "externa": false
+  },
+  "19": {
+   "nota": 76.9,
+   "ia": null,
+   "externa": false
+  },
+  "23": {
+   "nota": 74.4,
+   "ia": null,
+   "externa": false
+  },
+  "26": {
+   "nota": 76.4,
+   "ia": null,
+   "externa": false
+  }
+ },
+ "reel": {
+  "duracao": 26.4,
+  "resolucao": [
+   1080,
+   1920
+  ],
+  "audio": true,
+  "tamanho_mb": 15.33
+ },
+ "stories": [
+  {
+   "duracao": 5.0,
+   "resolucao": [
+    1080,
+    1920
+   ],
+   "audio": true,
+   "tamanho_mb": 2.05
+  },
+  {
+   "duracao": 5.0,
+   "resolucao": [
+    1080,
+    1920
+   ],
+   "audio": true,
+   "tamanho_mb": 1.73
+  },
+  {
+   "duracao": 5.0,
+   "resolucao": [
+    1080,
+    1920
+   ],
+   "audio": true,
+   "tamanho_mb": 1.54
+  },
+  {
+   "duracao": 5.0,
+   "resolucao": [
+    1080,
+    1920
+   ],
+   "audio": true,
+   "tamanho_mb": 1.25
+  }
+ ],
+ "arquivos": {
+  "reel": "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-11-13_AR-0146/reel.mp4",
+  "capa": "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-11-13_AR-0146/capa.jpg",
+  "stories": [
+   "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-11-13_AR-0146/story1.mp4",
+   "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-11-13_AR-0146/story2.mp4",
+   "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-11-13_AR-0146/story3.mp4",
+   "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-11-13_AR-0146/story4.mp4"
+  ],
+  "legenda": "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-11-13_AR-0146/legenda.txt"
+ },
+ "problemas": [],
+ "avisos": [
+  "Imóvel só com fotos antigas: 10 foto(s) com faixa verde usadas JÁ CORTADAS (faixa e equipe removidas automaticamente): [1, 6, 7, 17, 4, 9, 10, 19, 23, 26]"
+ ],
+ "aprovado_qc": true
+}

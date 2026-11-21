@@ -1,0 +1,141 @@
+{
+ "data": "2026-11-21",
+ "codigo": "AR-0136",
+ "codigo_rjweb": "1604",
+ "titulo": "Apartamento na Av. Boa Viagem, Recife-PE",
+ "tipo": "Apartamento em condomínio",
+ "categoria": "urbano",
+ "cidade": "Recife",
+ "preco": "R$ 3.350.000",
+ "formato": "ESTILO_DE_VIDA",
+ "gancho": "R$ 3,35 milhões em Recife. Vale o preço?",
+ "musica": "mixkit-180.mp3",
+ "estilo_musical": "reels-musicas",
+ "fotos_usadas": [
+  1,
+  0,
+  4,
+  7,
+  9,
+  10,
+  11,
+  3,
+  6,
+  8
+ ],
+ "notas_fotos": {
+  "1": {
+   "nota": 90.8,
+   "ia": null,
+   "externa": true
+  },
+  "0": {
+   "nota": 90.5,
+   "ia": null,
+   "externa": true
+  },
+  "4": {
+   "nota": 80.4,
+   "ia": null,
+   "externa": true
+  },
+  "7": {
+   "nota": 70.7,
+   "ia": null,
+   "externa": true
+  },
+  "9": {
+   "nota": 76.1,
+   "ia": null,
+   "externa": true
+  },
+  "10": {
+   "nota": 90.1,
+   "ia": null,
+   "externa": true
+  },
+  "11": {
+   "nota": 90.6,
+   "ia": null,
+   "externa": true
+  },
+  "3": {
+   "nota": 74.5,
+   "ia": null,
+   "externa": false
+  },
+  "6": {
+   "nota": 75.8,
+   "ia": null,
+   "externa": false
+  },
+  "8": {
+   "nota": 71.0,
+   "ia": null,
+   "externa": false
+  }
+ },
+ "reel": {
+  "duracao": 26.4,
+  "resolucao": [
+   1080,
+   1920
+  ],
+  "audio": true,
+  "tamanho_mb": 10.76
+ },
+ "stories": [
+  {
+   "duracao": 5.0,
+   "resolucao": [
+    1080,
+    1920
+   ],
+   "audio": true,
+   "tamanho_mb": 1.97
+  },
+  {
+   "duracao": 5.0,
+   "resolucao": [
+    1080,
+    1920
+   ],
+   "audio": true,
+   "tamanho_mb": 1.69
+  },
+  {
+   "duracao": 5.0,
+   "resolucao": [
+    1080,
+    1920
+   ],
+   "audio": true,
+   "tamanho_mb": 1.48
+  },
+  {
+   "duracao": 5.0,
+   "resolucao": [
+    1080,
+    1920
+   ],
+   "audio": true,
+   "tamanho_mb": 1.26
+  }
+ ],
+ "arquivos": {
+  "reel": "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-11-21_AR-0136/reel.mp4",
+  "capa": "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-11-21_AR-0136/capa.jpg",
+  "stories": [
+   "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-11-21_AR-0136/story1.mp4",
+   "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-11-21_AR-0136/story2.mp4",
+   "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-11-21_AR-0136/story3.mp4",
+   "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-11-21_AR-0136/story4.mp4"
+  ],
+  "legenda": "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-11-21_AR-0136/legenda.txt"
+ },
+ "problemas": [],
+ "avisos": [
+  "Imóvel só com fotos antigas: 10 foto(s) com faixa verde usadas JÁ CORTADAS (faixa e equipe removidas automaticamente): [1, 0, 4, 7, 9, 10, 11, 3, 6, 8]"
+ ],
+ "aprovado_qc": true
+}

@@ -1,0 +1,141 @@
+{
+ "data": "2026-11-21",
+ "codigo": "AR-0065",
+ "codigo_rjweb": "1027",
+ "titulo": "Sítio 2,5 ha à Venda em Chã Grande/PE",
+ "tipo": "Sítio",
+ "categoria": "rural",
+ "cidade": "Chã Grande",
+ "preco": "R$ 1.250.000",
+ "formato": "LISTA",
+ "gancho": "2,5 hectares em Chã Grande. Quanto vale?",
+ "musica": "mixkit-180.mp3",
+ "estilo_musical": "reels-musicas",
+ "fotos_usadas": [
+  10,
+  0,
+  3,
+  7,
+  9,
+  12,
+  13,
+  14,
+  16,
+  20
+ ],
+ "notas_fotos": {
+  "10": {
+   "nota": 88.6,
+   "ia": null,
+   "externa": true
+  },
+  "0": {
+   "nota": 83.9,
+   "ia": null,
+   "externa": true
+  },
+  "3": {
+   "nota": 84.3,
+   "ia": null,
+   "externa": true
+  },
+  "7": {
+   "nota": 81.0,
+   "ia": null,
+   "externa": true
+  },
+  "9": {
+   "nota": 87.0,
+   "ia": null,
+   "externa": true
+  },
+  "12": {
+   "nota": 86.6,
+   "ia": null,
+   "externa": true
+  },
+  "13": {
+   "nota": 87.6,
+   "ia": null,
+   "externa": true
+  },
+  "14": {
+   "nota": 85.8,
+   "ia": null,
+   "externa": true
+  },
+  "16": {
+   "nota": 81.0,
+   "ia": null,
+   "externa": false
+  },
+  "20": {
+   "nota": 81.3,
+   "ia": null,
+   "externa": false
+  }
+ },
+ "reel": {
+  "duracao": 30.3,
+  "resolucao": [
+   1080,
+   1920
+  ],
+  "audio": true,
+  "tamanho_mb": 14.9
+ },
+ "stories": [
+  {
+   "duracao": 5.0,
+   "resolucao": [
+    1080,
+    1920
+   ],
+   "audio": true,
+   "tamanho_mb": 1.93
+  },
+  {
+   "duracao": 5.0,
+   "resolucao": [
+    1080,
+    1920
+   ],
+   "audio": true,
+   "tamanho_mb": 2.72
+  },
+  {
+   "duracao": 5.0,
+   "resolucao": [
+    1080,
+    1920
+   ],
+   "audio": true,
+   "tamanho_mb": 1.53
+  },
+  {
+   "duracao": 5.0,
+   "resolucao": [
+    1080,
+    1920
+   ],
+   "audio": true,
+   "tamanho_mb": 1.26
+  }
+ ],
+ "arquivos": {
+  "reel": "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-11-21_AR-0065/reel.mp4",
+  "capa": "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-11-21_AR-0065/capa.jpg",
+  "stories": [
+   "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-11-21_AR-0065/story1.mp4",
+   "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-11-21_AR-0065/story2.mp4",
+   "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-11-21_AR-0065/story3.mp4",
+   "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-11-21_AR-0065/story4.mp4"
+  ],
+  "legenda": "/home/runner/work/angelorabelo-site/angelorabelo-site/casa/.rabelo-sync/reels-saida/2026-11-21_AR-0065/legenda.txt"
+ },
+ "problemas": [],
+ "avisos": [
+  "Imóvel só com fotos antigas: 10 foto(s) com faixa verde usadas JÁ CORTADAS (faixa e equipe removidas automaticamente): [10, 0, 3, 7, 9, 12, 13, 14, 16, 20]"
+ ],
+ "aprovado_qc": true
+}

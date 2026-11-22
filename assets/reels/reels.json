@@ -1,5 +1,19 @@
 [
  {
+  "codigo": "AR-0136",
+  "data": "2026-11-21",
+  "video": "/assets/reels/AR-0136.mp4",
+  "capa": "/assets/reels/AR-0136.jpg",
+  "duracao": 26.4
+ },
+ {
+  "codigo": "AR-0065",
+  "data": "2026-11-21",
+  "video": "/assets/reels/AR-0065.mp4",
+  "capa": "/assets/reels/AR-0065.jpg",
+  "duracao": 30.3
+ },
+ {
   "codigo": "AR-0102",
   "data": "2026-11-20",
   "video": "/assets/reels/AR-0102.mp4",
@@ -543,13 +557,6 @@
   "data": "2026-10-03",
   "video": "/assets/reels/AR-0138.mp4",
   "capa": "/assets/reels/AR-0138.jpg",
-  "duracao": 31.0
- },
- {
-  "codigo": "AR-0136",
-  "data": "2026-10-03",
-  "video": "/assets/reels/AR-0136.mp4",
-  "capa": "/assets/reels/AR-0136.jpg",
   "duracao": 31.0
  },
  {
